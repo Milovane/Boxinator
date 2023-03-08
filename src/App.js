@@ -1,6 +1,4 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { User } from "./models/User";
 import LoginForm from "./components/LoginForm";
 import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
