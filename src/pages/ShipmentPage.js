@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { Card } from "@mui/material";
 
 export const ShipmentPage = () => {
   return (
-    <div>
-      <h1 className="text-white">Hello Shipment</h1>
-    </div>
+    <>
+      <Card></Card>
+    </>
   );
 };
