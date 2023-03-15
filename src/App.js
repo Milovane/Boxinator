@@ -16,15 +16,7 @@ function App() {
         <Route path="/" element={<LoginFormPage />}></Route>
         <Route path="/login" element={<LoginFormPage />}></Route>
         <Route path="/shipment" element={<ShipmentPage />}></Route>
-        <Route path="/register" element={<RegisterForm />}></Route>
-        <Route
-          path="/history"
-          element={
-            <RequireAuth loginPath="/login">
-              <HistoryPage />
-            </RequireAuth>
-          }
-        ></Route>
+        <Route path="/history" element={<HistoryPage />}></Route>
       </Routes>
     </>
   );
