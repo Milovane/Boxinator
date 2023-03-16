@@ -7,6 +7,7 @@ import { HistoryPage } from "./pages/HistoryPage";
 import { ShipmentPage } from "./pages/ShipmentPage";
 import React from 'react';
 import RegisterForm from './RegisterForm';
+import Shipment from './pages/Shipment';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/login" element={<LoginFormPage />}></Route>
         <Route path="/shipment" element={<ShipmentPage />}></Route>
         <Route path="/register" element={<RegisterForm />}></Route>
+        <Route path="/create-shipment" element={<Shipment />} />
         <Route
           path="/history"
           element={
