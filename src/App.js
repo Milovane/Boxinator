@@ -19,13 +19,8 @@ function App() {
         <Route path="/shipment" element={<ShipmentPage />}></Route>
         <Route path="/register" element={<RegisterForm />}></Route>
         <Route path="/create-shipment" element={<Shipment />} />
-        <Route
-          path="/history"
-          element={
-            <RequireAuth loginPath="/login">
-              <HistoryPage />
-            </RequireAuth>
-          }
+        <Route path="/history" element={<HistoryPage /> }
+
         ></Route>
       </Routes>
     </>
