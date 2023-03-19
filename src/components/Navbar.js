@@ -9,12 +9,13 @@ export const Navbar = () => {
   const { keycloak, initialized } = useKeycloak();
   const navigate = useNavigate();
 
-  function successfulAuthentication() {
-    alert("Authentication successful");
-    // keycloak.onAuthSuccess = () => {
-    //   navigate("/register");
-    //   alert("Successful authentication");
-    // };
+  function checkAuthentication() {
+    if (keycloak.authenticated) {
+      //alert("Authentication successful");
+      navigate("/register");
+    } else {
+      //navigate("/");
+    }
   }
 
   return (
@@ -58,10 +59,10 @@ export const Navbar = () => {
             <section className="actions">
               {!keycloak.authenticated && (
                 <button
-                  onClick={() =>
-                    keycloak.login().onAuthSuccess(successfulAuthentication())
+                  onClick={
+                    () => keycloak.login()
+                    // keycloak.login().onAuthSuccess(successfulAuthentication())
                   }
-                  m
                 >
                   Login
                 </button>
@@ -69,20 +70,25 @@ export const Navbar = () => {
               {keycloak.authenticated && (
                 <button onClick={() => keycloak.logout()}>Logout</button>
               )}
+
+              {/* {successfulAuthentication()} */}
               {
                 (keycloak.onAuthSuccess = () => {
+                  //Fetch primary key/subject from DB, if it exists
+                  //navigate to shipments page?
+                  //if user does not exist, continue to register page
                   alert("Successful authentication, navigate to register page");
                   navigate("/register");
                 })
               }
             </section>
           </ul>
-          {keycloak.token && (
+          {/* {keycloak.token && (
             <div>
               <h4>Token</h4>
               <pre>{keycloak.token}</pre>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </nav>
