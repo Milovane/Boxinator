@@ -9,12 +9,35 @@ export const Navbar = () => {
   const { keycloak, initialized } = useKeycloak();
   const navigate = useNavigate();
 
-  function checkAuthentication() {
+  async function checkAuthentication() {
     if (keycloak.authenticated) {
       //alert("Authentication successful");
       navigate("/register");
+      alert("Fetch from API");
+      fetchUsers();
     } else {
       //navigate("/");
+    }
+  }
+
+  async function fetchUsers() {
+    try {
+      const apiResponse = await fetch("http://localhost:8080/api/v1/users", {
+        credentials: "include",
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer " + keycloak.token,
+          "User-Agent": "any-name",
+        },
+      });
+
+      //"Access-Control-Allow-Origin": "*",
+      var users = await apiResponse.json();
+
+      console.log(users);
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -78,7 +101,8 @@ export const Navbar = () => {
                   //navigate to shipments page?
                   //if user does not exist, continue to register page
                   alert("Successful authentication, navigate to register page");
-                  navigate("/register");
+                  //navigate("/register");
+                  checkAuthentication();
                 })
               }
             </section>
