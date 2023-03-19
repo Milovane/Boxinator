@@ -1,9 +1,22 @@
 import React from "react";
 import { Logo } from "./login-components/Logo";
 import Link from "./navbar-components/Link";
-import keycloak from "../keycloak";
+//import keycloak from "../keycloak";
+import { useKeycloak } from "@react-keycloak/web";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+  const { keycloak, initialized } = useKeycloak();
+  const navigate = useNavigate();
+
+  function successfulAuthentication() {
+    alert("Authentication successful");
+    // keycloak.onAuthSuccess = () => {
+    //   navigate("/register");
+    //   alert("Successful authentication");
+    // };
+  }
+
   return (
     <nav class="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
       <div class="container flex flex-wrap items-center justify-between mx-auto">
@@ -44,11 +57,24 @@ export const Navbar = () => {
             <Link link="#" name="Contact" />
             <section className="actions">
               {!keycloak.authenticated && (
-                <button onClick={() => keycloak.login()}>Login</button>
+                <button
+                  onClick={() =>
+                    keycloak.login().onAuthSuccess(successfulAuthentication())
+                  }
+                  m
+                >
+                  Login
+                </button>
               )}
               {keycloak.authenticated && (
                 <button onClick={() => keycloak.logout()}>Logout</button>
               )}
+              {
+                (keycloak.onAuthSuccess = () => {
+                  alert("Successful authentication, navigate to register page");
+                  navigate("/register");
+                })
+              }
             </section>
           </ul>
           {keycloak.token && (
