@@ -1,6 +1,7 @@
 import React from "react";
 import { Logo } from "./login-components/Logo";
 import Link from "./navbar-components/Link";
+import keycloak from "../keycloak";
 
 export const Navbar = () => {
   return (
@@ -41,7 +42,21 @@ export const Navbar = () => {
             <Link link="/shipment" name="Shipment" />
             <Link link="/history" name="History" />
             <Link link="#" name="Contact" />
+            <section className="actions">
+              {!keycloak.authenticated && (
+                <button onClick={() => keycloak.login()}>Login</button>
+              )}
+              {keycloak.authenticated && (
+                <button onClick={() => keycloak.logout()}>Logout</button>
+              )}
+            </section>
           </ul>
+          {keycloak.token && (
+            <div>
+              <h4>Token</h4>
+              <pre>{keycloak.token}</pre>
+            </div>
+          )}
         </div>
       </div>
     </nav>
