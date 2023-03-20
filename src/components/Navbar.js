@@ -10,7 +10,7 @@ export const Navbar = () => {
 
   async function checkAuthentication() {
     if (keycloak.authenticated) {
-    } else {
+      fetchUserWithId();
     }
   }
 
@@ -34,6 +34,73 @@ export const Navbar = () => {
     }
   }
 
+  async function postGuestUser() {
+    try {
+      const apiResponse = await fetch(
+        "http://localhost:8080/api/v1/users/registerGuest",
+        {
+          credentials: "include",
+          method: "POST",
+          body: JSON.stringify({
+            jwt: keycloak.token,
+          }),
+          headers: {
+            "content-type": "application/json",
+            Authorization: "Bearer " + keycloak.token,
+            "User-Agent": "any-name",
+          },
+        }
+      );
+
+      //"Access-Control-Allow-Origin": "*",
+      console.log("User token: ");
+      console.log(keycloak.token);
+      var response = await apiResponse.json();
+      alert("User posted!");
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function fetchUserWithId() {
+    const userId = keycloak.subject;
+
+    try {
+      const apiResponse = await fetch(
+        `http://localhost:8080/api/v1/users/${userId}`,
+        {
+          credentials: "include",
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            Authorization: "Bearer " + keycloak.token,
+            "User-Agent": "any-name",
+          },
+        }
+      );
+
+      console.log(apiResponse);
+
+      if (apiResponse.ok) {
+        //User exists
+        var user = await apiResponse.json();
+        console.log(user);
+        alert("user exists, navigate to shipment page");
+        navigate("/shipment");
+      } else {
+        //User does not exist
+        alert("user does not exist, navigate to register page");
+        navigate("/register");
+        //for testing purposes, basic guest user
+        //postGuestUser();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
       <div className="container flex flex-wrap items-center justify-between mx-auto">
@@ -47,13 +114,7 @@ export const Navbar = () => {
             <Link link="#" name="Contact" />
             <section className="actions">
               {!keycloak.authenticated && (
-                <button
-                  onClick={
-                    () => keycloak.login()
-                  }
-                >
-                  Login
-                </button>
+                <button onClick={() => keycloak.login()}>Login</button>
               )}
               {keycloak.authenticated && (
                 <>
@@ -61,15 +122,19 @@ export const Navbar = () => {
                   <button onClick={() => navigate('/user')}>User</button>
                 </>
               )}
-
               {
                 (keycloak.onAuthSuccess = () => {
-                  alert("Successful authentication, navigate to register page");
                   checkAuthentication();
                 })
               }
             </section>
           </ul>
+          {/* For testing, show keycloak token: {keycloak.token && (
+            <div>
+              <h4>Token</h4>
+              <pre>{keycloak.token}</pre>
+            </div>
+          )} */}
         </div>
       </div>
     </nav>
