@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RequireAuth } from "react-auth-kit";
 import { HistoryPage } from "./pages/HistoryPage";
 import { ShipmentPage } from "./pages/ShipmentPage";
+import { AdminPage } from "./pages/AdminPage";
 import React from "react";
 import RegisterForm from "./RegisterForm";
 import Shipment from "./pages/Shipment";
@@ -31,6 +32,14 @@ function App() {
               <Route path="/shipment" element={<ShipmentPage />}></Route>
               <Route path="/register" element={<RegisterForm />}></Route>
               <Route path="/create-shipment" element={<Shipment />} />
+              <Route
+                path="/admin"
+                element={
+                  <KeycloakRoute role={ROLES.Admin}>
+                    <AdminPage />
+                  </KeycloakRoute>
+                }
+              />
               <Route path="/history" element={<HistoryPage />}></Route>
             </Routes>
           </main>
