@@ -2,17 +2,15 @@ import "./App.css";
 import { LoginFormPage } from "./pages/LoginFormPage";
 import { Navbar } from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { RequireAuth } from "react-auth-kit";
 import { HistoryPage } from "./pages/HistoryPage";
 import { ShipmentPage } from "./pages/ShipmentPage";
 import { AdminPage } from "./pages/AdminPage";
 import React from "react";
 import RegisterForm from "./RegisterForm";
 import Shipment from "./pages/Shipment";
-import KeycloakRoute from "./routes/KeycloakRoute";
-import { ROLES } from "./const/roles";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./keycloak";
+import UserPage from "./pages/UserPage"; // Import UserPage component
 
 function App() {
   return (
@@ -41,6 +39,9 @@ function App() {
                 }
               />
               <Route path="/history" element={<HistoryPage />}></Route>
+              {keycloak.authenticated && (
+                <Route path="/user" element={<UserPage />} />
+              )}
             </Routes>
           </main>
         </BrowserRouter>
