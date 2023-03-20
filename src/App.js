@@ -8,6 +8,8 @@ import { AdminPage } from "./pages/AdminPage";
 import React from "react";
 import RegisterForm from "./RegisterForm";
 import Shipment from "./pages/Shipment";
+import { ROLES } from "./const/roles";
+import KeycloakRoute from "./routes/KeycloakRoute";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./keycloak";
 import UserPage from "./pages/UserPage"; // Import UserPage component
@@ -30,6 +32,7 @@ function App() {
               <Route path="/shipment" element={<ShipmentPage />}></Route>
               <Route path="/register" element={<RegisterForm />}></Route>
               <Route path="/create-shipment" element={<Shipment />} />
+              
               <Route
                 path="/admin"
                 element={
