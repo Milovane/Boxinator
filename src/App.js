@@ -13,6 +13,7 @@ import KeycloakRoute from "./routes/KeycloakRoute";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./keycloak";
 import UserPage from "./pages/UserPage"; // Import UserPage component
+import TestPage from "./pages/TestPage";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
               <Route path="/shipment" element={<ShipmentPage />}></Route>
               <Route path="/register" element={<RegisterForm />}></Route>
               <Route path="/create-shipment" element={<Shipment />} />
+              <Route path="/test" element={<TestPage/>} />
               
               <Route
                 path="/admin"

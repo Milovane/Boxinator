@@ -10,7 +10,7 @@ export const Navbar = () => {
 
   async function checkAuthentication() {
     if (keycloak.authenticated) {
-      fetchUserWithId();
+      // fetchUserWithId();
     }
   }
 
