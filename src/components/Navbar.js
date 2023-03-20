@@ -11,12 +11,7 @@ export const Navbar = () => {
 
   async function checkAuthentication() {
     if (keycloak.authenticated) {
-      // //alert("Authentication successful");
-      // navigate("/register");
-      // alert("Fetch from API");
-      // fetchUsers();
-    } else {
-      //navigate("/");
+      fetchUserWithId();
     }
   }
 
@@ -36,6 +31,73 @@ export const Navbar = () => {
       var users = await apiResponse.json();
 
       console.log(users);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function postGuestUser() {
+    try {
+      const apiResponse = await fetch(
+        "http://localhost:8080/api/v1/users/registerGuest",
+        {
+          credentials: "include",
+          method: "POST",
+          body: JSON.stringify({
+            jwt: keycloak.token,
+          }),
+          headers: {
+            "content-type": "application/json",
+            Authorization: "Bearer " + keycloak.token,
+            "User-Agent": "any-name",
+          },
+        }
+      );
+
+      //"Access-Control-Allow-Origin": "*",
+      console.log("User token: ");
+      console.log(keycloak.token);
+      var response = await apiResponse.json();
+      alert("User posted!");
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function fetchUserWithId() {
+    const userId = keycloak.subject;
+
+    try {
+      const apiResponse = await fetch(
+        `http://localhost:8080/api/v1/users/${userId}`,
+        {
+          credentials: "include",
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            Authorization: "Bearer " + keycloak.token,
+            "User-Agent": "any-name",
+          },
+        }
+      );
+
+      console.log(apiResponse);
+
+      if (apiResponse.ok) {
+        //User exists
+        var user = await apiResponse.json();
+        console.log(user);
+        alert("user exists, navigate to shipment page");
+        navigate("/shipment");
+      } else {
+        //User does not exist
+        alert("user does not exist, navigate to register page");
+        navigate("/register");
+        //for testing purposes, basic guest user
+        //postGuestUser();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -81,33 +143,19 @@ export const Navbar = () => {
             <Link link="#" name="Contact" />
             <section className="actions">
               {!keycloak.authenticated && (
-                <button
-                  onClick={
-                    () => keycloak.login()
-                    // keycloak.login().onAuthSuccess(successfulAuthentication())
-                  }
-                >
-                  Login
-                </button>
+                <button onClick={() => keycloak.login()}>Login</button>
               )}
               {keycloak.authenticated && (
                 <button onClick={() => keycloak.logout()}>Logout</button>
               )}
-
-              {/* {successfulAuthentication()} */}
               {
                 (keycloak.onAuthSuccess = () => {
-                  //Fetch primary key/subject from DB, if it exists
-                  //navigate to shipments page?
-                  //if user does not exist, continue to register page
-                  alert("Successful authentication, navigate to register page");
-                  //navigate("/register");
                   checkAuthentication();
                 })
               }
             </section>
           </ul>
-          {/* {keycloak.token && (
+          {/* For testing, show keycloak token: {keycloak.token && (
             <div>
               <h4>Token</h4>
               <pre>{keycloak.token}</pre>
