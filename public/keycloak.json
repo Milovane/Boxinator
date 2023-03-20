@@ -1,0 +1,8 @@
+{
+  "realm": "boxinator",
+  "auth-server-url": "https://lemur-3.cloud-iam.com/auth/",
+  "ssl-required": "external",
+  "resource": "react-client",
+  "public-client": true,
+  "confidential-port": 0
+}

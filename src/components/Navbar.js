@@ -1,8 +1,46 @@
 import React from "react";
 import { Logo } from "./login-components/Logo";
 import Link from "./navbar-components/Link";
+//import keycloak from "../keycloak";
+import { useKeycloak } from "@react-keycloak/web";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+  const { keycloak, initialized } = useKeycloak();
+  const navigate = useNavigate();
+
+  async function checkAuthentication() {
+    if (keycloak.authenticated) {
+      //alert("Authentication successful");
+      navigate("/register");
+      alert("Fetch from API");
+      fetchUsers();
+    } else {
+      //navigate("/");
+    }
+  }
+
+  async function fetchUsers() {
+    try {
+      const apiResponse = await fetch("http://localhost:8080/api/v1/users", {
+        credentials: "include",
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer " + keycloak.token,
+          "User-Agent": "any-name",
+        },
+      });
+
+      //"Access-Control-Allow-Origin": "*",
+      var users = await apiResponse.json();
+
+      console.log(users);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <nav class="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
       <div class="container flex flex-wrap items-center justify-between mx-auto">
@@ -41,7 +79,40 @@ export const Navbar = () => {
             <Link link="/shipment" name="Shipment" />
             <Link link="/history" name="History" />
             <Link link="#" name="Contact" />
+            <section className="actions">
+              {!keycloak.authenticated && (
+                <button
+                  onClick={
+                    () => keycloak.login()
+                    // keycloak.login().onAuthSuccess(successfulAuthentication())
+                  }
+                >
+                  Login
+                </button>
+              )}
+              {keycloak.authenticated && (
+                <button onClick={() => keycloak.logout()}>Logout</button>
+              )}
+
+              {/* {successfulAuthentication()} */}
+              {
+                (keycloak.onAuthSuccess = () => {
+                  //Fetch primary key/subject from DB, if it exists
+                  //navigate to shipments page?
+                  //if user does not exist, continue to register page
+                  alert("Successful authentication, navigate to register page");
+                  //navigate("/register");
+                  checkAuthentication();
+                })
+              }
+            </section>
           </ul>
+          {/* {keycloak.token && (
+            <div>
+              <h4>Token</h4>
+              <pre>{keycloak.token}</pre>
+            </div>
+          )} */}
         </div>
       </div>
     </nav>
