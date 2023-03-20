@@ -11,6 +11,7 @@ const boxColors = [
   "Orange",
   "White",
   "Black",
+  "Pink"
 ];
 
 export default function Shipment() {
@@ -58,21 +59,28 @@ export default function Shipment() {
       DELUXE: 5,
       PREMIUM: 8,
     };
-
+  
     const flatFee = 200;
     const selectedCountry = destinationCountries.find(
       (country) => country.id.toString() === destinationCountry
     );
-
+  
     if (!selectedCountry || !weightOption) {
       setPrice(null);
       return;
     }
-
+  
     const weight = weightMap[weightOption];
     const countryMultiplier = selectedCountry.countryMultiplier;
+  
+    // Check if the selected country is Norway, Sweden, or Denmark
+    const nordicCountries = ["Norway", "Sweden", "Denmark"];
+    if (nordicCountries.includes(selectedCountry.name)) {
+      setPrice(flatFee);
+      return;
+    }
+  
     const totalPrice = flatFee + weight * countryMultiplier;
-
     setPrice(totalPrice);
   };
 

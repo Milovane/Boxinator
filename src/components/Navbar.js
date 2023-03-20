@@ -11,10 +11,10 @@ export const Navbar = () => {
 
   async function checkAuthentication() {
     if (keycloak.authenticated) {
-      //alert("Authentication successful");
-      navigate("/register");
-      alert("Fetch from API");
-      fetchUsers();
+      // //alert("Authentication successful");
+      // navigate("/register");
+      // alert("Fetch from API");
+      // fetchUsers();
     } else {
       //navigate("/");
     }
