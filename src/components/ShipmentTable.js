@@ -40,9 +40,7 @@ const ShipmentTable = ({ orders, onDelete }) => {
                 <IconButton
                   aria-label="delete"
                   onClick={() => onDelete(order.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
+                ></IconButton>
                 <TableCell></TableCell>
               </TableRow>
             ))}
