@@ -1,5 +1,5 @@
 import "./App.css";
-import { LoginFormPage } from "./pages/LoginFormPage";
+import HomePage from "./pages/HomePage";
 import { Navbar } from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HistoryPage } from "./pages/HistoryPage";
@@ -36,6 +36,9 @@ function App() {
             <Navbar />
             <main className="container">
               <Routes>
+                <Route path="/" element={<HomePage />}></Route>
+                {/* <Route path="/login" element={<LoginFormPage />}></Route> */}
+                <Route path="/shipment" element={<ShipmentPage />}></Route>
                 <Route path="/" element={<LoginFormPage />}></Route>
                 <Route path="/login" element={<LoginFormPage />}></Route>
                 <Route
