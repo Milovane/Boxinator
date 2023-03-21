@@ -91,9 +91,10 @@ export const Navbar = () => {
         var user = await apiResponse.json();
         console.log(user + " hihihi");
 
-        alert("user exists, navigate to shipment page");
         updateContext(user);
-        navigate("/shipment");
+        //Todo: remove
+        //alert("user exists, navigate to shipment page");
+        //navigate("/shipment");
       } else {
         //User does not exist
         alert("user does not exist, navigate to register page");
