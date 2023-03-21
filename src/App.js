@@ -38,9 +38,6 @@ function App() {
               <Routes>
                 <Route path="/" element={<HomePage />}></Route>
                 {/* <Route path="/login" element={<LoginFormPage />}></Route> */}
-                <Route path="/shipment" element={<ShipmentPage />}></Route>
-                <Route path="/" element={<LoginFormPage />}></Route>
-                <Route path="/login" element={<LoginFormPage />}></Route>
                 <Route
                   path="/shipment"
                   element={<ShipmentPage keycloak={keycloak} />}
