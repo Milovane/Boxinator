@@ -3,7 +3,6 @@ import { LoginFormPage } from "./pages/LoginFormPage";
 import { Navbar } from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HistoryPage } from "./pages/HistoryPage";
-import { ShipmentPage } from "./pages/ShipmentPage";
 import { AdminPage } from "./pages/AdminPage";
 import React from "react";
 import RegisterForm from "./RegisterForm";
@@ -16,6 +15,7 @@ import UserPage from "./pages/UserPage"; // Import UserPage component
 import TestPage from "./pages/TestPage";
 import { Context } from "./context";
 import { useState } from "react";
+import ShipmentPage from "./pages/ShipmentPage";
 
 function App() {
   const [context, setContext] = useState({});
@@ -38,7 +38,10 @@ function App() {
               <Routes>
                 <Route path="/" element={<LoginFormPage />}></Route>
                 <Route path="/login" element={<LoginFormPage />}></Route>
-                <Route path="/shipment" element={<ShipmentPage />}></Route>
+                <Route
+                  path="/shipment"
+                  element={<ShipmentPage keycloak={keycloak} />}
+                ></Route>
                 <Route path="/register" element={<RegisterForm />}></Route>
                 <Route path="/create-shipment" element={<Shipment />} />
                 <Route path="/test" element={<TestPage />} />

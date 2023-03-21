@@ -5,6 +5,7 @@ import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../context";
+
 export const Navbar = () => {
   const { keycloak, initialized } = useKeycloak();
   const navigate = useNavigate();

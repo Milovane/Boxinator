@@ -3,6 +3,7 @@ import axios from "axios";
 import "./ShipmentCube.css";
 import { useContext } from "react";
 import { Context } from "../context";
+import keycloak from "../keycloak";
 
 const weightOptions = ["BASIC", "HUMBLE", "DELUXE", "PREMIUM"];
 const boxColors = [
@@ -26,11 +27,22 @@ export default function Shipment() {
 
   const boxRef = useRef(null);
 
+const { context } = useContext(Context);
+const currentUser = context.user;
+const token = keycloak.token;
+console.log(token);
+const headers = {
+  Authorization: `Bearer ${token}`,
+};
+
+console.log(keycloak.token)
+
+
   useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/v1/countries"
+          "http://localhost:8080/api/v1/countries", { headers: headers }
         );
         setDestinationCountries(response.data);
       } catch (error) {
@@ -101,15 +113,17 @@ export default function Shipment() {
     const shipmentData = {
       receiverName: receiverName,
       weightOption: weightOption,
-      boxColour: boxColor,
+      boxColor: boxColor,
       destinationCountry: selectedCountry.name,
       price: price,
+      userId: keycloak.subject,
+      
     };
+    console.log(shipmentData)
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/shipments",
-        shipmentData
+        "http://localhost:8080/api/v1/shipments", shipmentData, { headers: headers }
       );
 
       console.log("Shipment created:", response.data);
