@@ -4,8 +4,12 @@ import UserForm from "./components/UserComponents/UserForm";
 import keycloak from "./keycloak";
 import { useContext } from "react";
 import { Context } from "./context";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
+  const { context, updateContext } = useContext(Context);
+
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -51,6 +55,10 @@ const RegisterForm = () => {
       )
       .then((response) => {
         console.log(response.data);
+        if (response.request.status === 200) {
+          updateContext(response.data);
+          navigate("/shipment");
+        }
       })
       .catch((error) => {
         console.log(error);
