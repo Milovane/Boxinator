@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import UserForm from "./components/UserComponents/UserForm";
 import keycloak from "./keycloak";
+import { useContext } from "react";
+import { Context } from "./context";
 
 const RegisterForm = () => {
   const [user, setUser] = useState({
@@ -15,7 +17,7 @@ const RegisterForm = () => {
     contactNumber: "",
   });
 
-  console.log(keycloak.token)
+  console.log(keycloak.token);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,13 +38,17 @@ const RegisterForm = () => {
     }
 
     const token = keycloak.token;
-    console.log(token)
+    console.log(token);
     const headers = {
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     };
 
     axios
-      .post("http://localhost:8080/api/v1/users/registerRegularUser", registeredUser, { headers: headers })
+      .post(
+        "http://localhost:8080/api/v1/users/registerRegularUser",
+        registeredUser,
+        { headers: headers }
+      )
       .then((response) => {
         console.log(response.data);
       })

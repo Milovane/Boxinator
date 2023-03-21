@@ -3,14 +3,17 @@ import { Logo } from "./login-components/Logo";
 import Link from "./navbar-components/Link";
 import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router-dom";
-
+import { useContext } from "react";
+import { Context } from "../context";
 export const Navbar = () => {
   const { keycloak, initialized } = useKeycloak();
   const navigate = useNavigate();
-
+  const { context, updateContext } = useContext(Context);
+  console.log("Context: " + JSON.stringify(context));
   async function checkAuthentication() {
     if (keycloak.authenticated) {
-      // fetchUserWithId();
+      console.log("HIHIHH");
+      fetchUserWithId();
     }
   }
 
@@ -86,8 +89,10 @@ export const Navbar = () => {
       if (apiResponse.ok) {
         //User exists
         var user = await apiResponse.json();
-        console.log(user);
+        console.log(user + " hihihi");
+
         alert("user exists, navigate to shipment page");
+        updateContext(user);
         navigate("/shipment");
       } else {
         //User does not exist
@@ -105,7 +110,10 @@ export const Navbar = () => {
     <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
       <div className="container flex flex-wrap items-center justify-between mx-auto">
         <Logo w="w-8" h="h-8" textColor={"text-dark"} />
-        <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+        <div
+          className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+          id="navbar-sticky"
+        >
           <ul className="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <Link link="#" name="Home" />
             <Link link="#" name="About" />
@@ -119,7 +127,7 @@ export const Navbar = () => {
               {keycloak.authenticated && (
                 <>
                   <button onClick={() => keycloak.logout()}>Logout</button>
-                  <button onClick={() => navigate('/user')}>User</button>
+                  <button onClick={() => navigate("/user")}>User</button>
                 </>
               )}
               {

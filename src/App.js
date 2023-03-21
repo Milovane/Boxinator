@@ -14,8 +14,15 @@ import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./keycloak";
 import UserPage from "./pages/UserPage"; // Import UserPage component
 import TestPage from "./pages/TestPage";
+import { Context } from "./context";
+import { useState } from "react";
 
 function App() {
+  const [context, setContext] = useState({});
+
+  const updateContext = (newContext) => {
+    setContext({ ...context, ...newContext });
+  };
   return (
     <>
       <ReactKeycloakProvider
@@ -25,30 +32,32 @@ function App() {
         }}
       >
         <BrowserRouter>
-          <Navbar />
-          <main className="container">
-            <Routes>
-              <Route path="/" element={<LoginFormPage />}></Route>
-              <Route path="/login" element={<LoginFormPage />}></Route>
-              <Route path="/shipment" element={<ShipmentPage />}></Route>
-              <Route path="/register" element={<RegisterForm />}></Route>
-              <Route path="/create-shipment" element={<Shipment />} />
-              <Route path="/test" element={<TestPage/>} />
-              
-              <Route
-                path="/admin"
-                element={
-                  <KeycloakRoute role={ROLES.Admin}>
-                    <AdminPage />
-                  </KeycloakRoute>
-                }
-              />
-              <Route path="/history" element={<HistoryPage />}></Route>
-              {keycloak.authenticated && (
-                <Route path="/user" element={<UserPage />} />
-              )}
-            </Routes>
-          </main>
+          <Context.Provider value={{ context, updateContext }}>
+            <Navbar />
+            <main className="container">
+              <Routes>
+                <Route path="/" element={<LoginFormPage />}></Route>
+                <Route path="/login" element={<LoginFormPage />}></Route>
+                <Route path="/shipment" element={<ShipmentPage />}></Route>
+                <Route path="/register" element={<RegisterForm />}></Route>
+                <Route path="/create-shipment" element={<Shipment />} />
+                <Route path="/test" element={<TestPage />} />
+
+                <Route
+                  path="/admin"
+                  element={
+                    <KeycloakRoute role={ROLES.Admin}>
+                      <AdminPage />
+                    </KeycloakRoute>
+                  }
+                />
+                <Route path="/history" element={<HistoryPage />}></Route>
+                {keycloak.authenticated && (
+                  <Route path="/user" element={<UserPage />} />
+                )}
+              </Routes>
+            </main>
+          </Context.Provider>
         </BrowserRouter>
       </ReactKeycloakProvider>
     </>

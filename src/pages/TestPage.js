@@ -1,33 +1,35 @@
-import React from 'react';
-import ShipmentCard from '../ShipmentComponents/ShipmentCard';
+import React from "react";
+import ShipmentCard from "../ShipmentComponents/ShipmentCard";
+import { useContext } from "react";
+import { Context } from "../context";
 
 const TestPage = () => {
   const shipment = {
-    receiverName: 'John Doe',
-    weightOption: 'HUMBLE',
-    boxColor: 'Red',
-    destinationCountry: 'United States',
+    receiverName: "John Doe",
+    weightOption: "HUMBLE",
+    boxColor: "Red",
+    destinationCountry: "United States",
     price: 250,
     shipmentHistory: [
       {
         Id: 1,
-        shipmentStatus: 'CREATED',
-        createdAt: '2023-03-15T10:00:00.000Z',
+        shipmentStatus: "CREATED",
+        createdAt: "2023-03-15T10:00:00.000Z",
       },
       {
         Id: 2,
-        shipmentStatus: 'RECEIVED',
-        createdAt: '2023-03-16T12:00:00.000Z',
+        shipmentStatus: "RECEIVED",
+        createdAt: "2023-03-16T12:00:00.000Z",
       },
       {
         Id: 3,
-        shipmentStatus: 'INTRANSIT',
-        createdAt: '2023-03-18T15:00:00.000Z',
+        shipmentStatus: "INTRANSIT",
+        createdAt: "2023-03-18T15:00:00.000Z",
       },
       {
         Id: 4,
-        shipmentStatus: 'COMPLETED',
-        createdAt: '2023-03-18T15:00:00.000Z',
+        shipmentStatus: "COMPLETED",
+        createdAt: "2023-03-18T15:00:00.000Z",
       },
     ],
   };
