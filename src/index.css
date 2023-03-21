@@ -6,6 +6,7 @@ body {
   background-image: url("https://res.cloudinary.com/divyeb9ec/image/upload/v1678265109/timelab-pro-yx20mpDyr2I-unsplash_oiwqbw.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
   height: 100vh;
 
   margin: 0;
