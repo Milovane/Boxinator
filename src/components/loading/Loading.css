@@ -1,0 +1,9 @@
+#loadingLabel {
+  padding: 15px;
+  z-index: 9999999;
+  color: #333;
+  background-color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+}
