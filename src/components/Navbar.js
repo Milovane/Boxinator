@@ -5,6 +5,7 @@ import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../context";
+import Button from "@mui/material/Button";
 
 export const Navbar = () => {
   const { keycloak, initialized } = useKeycloak();
@@ -117,19 +118,25 @@ export const Navbar = () => {
           id="navbar-sticky"
         >
           <ul className="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <Link link="#" name="Home" />
-            <Link link="#" name="About" />
+            <Link link="/" name="Home" />
             <Link link="/shipment" name="Shipment" />
-            <Link link="/history" name="History" />
-            <Link link="#" name="Contact" />
+            {keycloak.authenticated && (
+              <>
+                <Link link="/user" name="Profile"></Link>
+              </>
+            )}
+
             <section className="actions">
               {!keycloak.authenticated && (
-                <button onClick={() => keycloak.login()}>Login</button>
+                <Button onClick={() => keycloak.login()} variant="contained">
+                  Login
+                </Button>
               )}
               {keycloak.authenticated && (
                 <>
-                  <button onClick={() => keycloak.logout()}>Logout</button>
-                  <button onClick={() => navigate("/user")}>User</button>
+                  <Button onClick={() => keycloak.logout()} variant="contained">
+                    Logout
+                  </Button>
                 </>
               )}
               {
