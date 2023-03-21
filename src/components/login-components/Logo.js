@@ -3,7 +3,7 @@ import React from "react";
 export const Logo = ({ w, h, textColor }) => {
   return (
     <a
-      href="#"
+      href="/"
       className={`flex items-center mb-2 text-2xl font-semibold ${textColor} dark:text-white`}
     >
       <img
