@@ -23,6 +23,7 @@ const ShipmentCard = ({ shipment }) => {
   const renderStatusMap = () => {
     const map = [];
     const cancelled = latestStatus.shipmentStatus === "CANCELLED";
+    const completed = latestStatus.shipmentStatus === "COMPLETED";
     for (let i = 0; i < 4; i++) {
       map.push(
         <span
@@ -30,6 +31,8 @@ const ShipmentCard = ({ shipment }) => {
           className={`${
             cancelled
               ? "bg-red-500"
+              : completed
+              ? "bg-yellow-300"
               : i <= statusMap[latestStatus.shipmentStatus]
               ? "bg-green-500"
               : "bg-gray-300"
@@ -41,7 +44,7 @@ const ShipmentCard = ({ shipment }) => {
           <span
             key={`line-${i}`}
             className={`${
-              cancelled ? "bg-red-500" : "bg-gray-300"
+              cancelled ? "bg-red-500" : completed ? "bg-yellow-300" : "bg-gray-300"
             } mx-1 w-4 h-1 block`}
           ></span>
         );

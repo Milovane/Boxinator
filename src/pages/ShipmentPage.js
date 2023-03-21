@@ -42,31 +42,31 @@ const ShipmentPage = ({ keycloak }) => {
 
   return (
     <div className="relative">
-      <div className="mt-6">
-        <h1 className="text-xl font-bold mb-4">Your Shipments</h1>
-        <div className="flex justify-around">
-          <div className="w-1/3">
-            <h2 className="text-lg font-bold mb-4">Active Shipments</h2>
-            {filterShipments(["CREATED", "RECEIVED", "INTRANSIT"]).map(
-              (shipment) => (
-                <ShipmentCard key={shipment.id} shipment={shipment} />
-              )
-            )}
-          </div>
-          <div className="w-1/3">
-            <h2 className="text-lg font-bold mb-4">Completed Shipments</h2>
-            {filterShipments(["COMPLETED"]).map((shipment) => (
+    <div className="mt-6">
+      <h1 className="text-xl font-bold mb-4">Your Shipments</h1>
+      <div className="flex justify-around">
+        <div className="w-1/3">
+          <h2 className="text-2xl font-semibold mb-4 text-white bg-green-600 px-4 py-2 rounded-md">Active Shipments</h2>
+          {filterShipments(["CREATED", "RECEIVED", "INTRANSIT"]).map(
+            (shipment) => (
               <ShipmentCard key={shipment.id} shipment={shipment} />
-            ))}
-          </div>
-          <div className="w-1/3">
-            <h2 className="text-lg font-bold mb-4">Cancelled Shipments</h2>
-            {filterShipments(["CANCELLED"]).map((shipment) => (
-              <ShipmentCard key={shipment.id} shipment={shipment} />
-            ))}
-          </div>
+            )
+          )}
+        </div>
+        <div className="w-1/3">
+          <h2 className="text-2xl font-semibold mb-4 text-white bg-yellow-400 px-4 py-2 rounded-md">Completed Shipments</h2>
+          {filterShipments(["COMPLETED"]).map((shipment) => (
+            <ShipmentCard key={shipment.id} shipment={shipment} />
+          ))}
+        </div>
+        <div className="w-1/3">
+          <h2 className="text-2xl font-semibold mb-4 text-white bg-red-600 px-4 py-2 rounded-md">Cancelled Shipments</h2>
+          {filterShipments(["CANCELLED"]).map((shipment) => (
+            <ShipmentCard key={shipment.id} shipment={shipment} />
+          ))}
         </div>
       </div>
+    </div>
       {keycloak.authenticated && (
         <button
           onClick={handleCreateShipmentClick}
