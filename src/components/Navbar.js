@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../context";
 import Button from "@mui/material/Button";
+import { ROLES } from "../const/roles";
 
 export const Navbar = () => {
   const { keycloak, initialized } = useKeycloak();
@@ -123,6 +124,12 @@ export const Navbar = () => {
               <>
                 <Link link="/shipment" name="Shipment" />
                 <Link link="/user" name="Profile"></Link>
+              </>
+            )}
+
+            {keycloak.authenticated && keycloak.hasRealmRole(ROLES.Admin) && (
+              <>
+                <Link link="/country" name="Countries" />
               </>
             )}
 
