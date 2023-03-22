@@ -4,6 +4,7 @@ import "./ShipmentCube.css";
 import { useContext } from "react";
 import { Context } from "../context";
 import keycloak from "../keycloak";
+import { sendEmailAPI } from "../Email";
 import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -25,7 +26,9 @@ const boxColors = [
 ];
 
 export default function Shipment() {
+  const { context, updateContext } = useContext(Context);
   const [receiverName, setReceiverName] = useState("");
+  const [email, setEmail] = useState("");
   const [weightOption, setWeightOption] = useState("");
   const [boxColor, setBoxColor] = useState("");
   const [destinationCountry, setDestinationCountry] = useState("");
@@ -41,6 +44,12 @@ export default function Shipment() {
   });
 
   const boxRef = useRef(null);
+  const currentUser = context.user;
+  const token = keycloak.token;
+  console.log(token);
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
 
   const { context } = useContext(Context);
   const currentUser = context.user;
@@ -58,6 +67,7 @@ export default function Shipment() {
         const response = await axios.get(
           "http://localhost:8080/api/v1/countries/list"
         );
+
         setDestinationCountries(response.data);
       } catch (error) {
         console.error("Error fetching countries:", error);
@@ -124,24 +134,52 @@ export default function Shipment() {
       return;
     }
 
-    const shipmentData = {
-      receiverName: receiverName,
-      weightOption: weightOption,
-      boxColor: boxColor,
-      destinationCountry: selectedCountry.name,
-      price: price,
-      userId: keycloak.subject,
-    };
-    console.log(shipmentData);
+    let shipmentData = {};
+    let endpoint = "";
+    if (keycloak.authenticated) {
+      shipmentData = {
+        receiverName: receiverName,
+        weightOption: weightOption,
+        boxColour: boxColor,
+        destinationCountry: selectedCountry.name,
+        price: price,
+        userId: keycloak.subject,
+      };
+      endpoint = "http://localhost:8080/api/v1/shipments";
+    } else {
+      shipmentData = {
+        receiverName: receiverName,
+        weightOption: weightOption,
+        boxColour: boxColor,
+        destinationCountry: selectedCountry.name,
+        user: {
+          email: email,
+          typeOfUser: "Guest",
+        },
+        shipmentHistory: [],
+        price: price,
+      };
+      endpoint = `http://localhost:8080/api/v1/shipments/createGuestShipment/${email}`;
+    }
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/shipments",
-        shipmentData,
-        { headers: headers }
-      );
+      let response;
+      if (keycloak.authenticated) {
+        response = await axios.post(endpoint, shipmentData, {
+          headers: headers,
+        });
+      } else {
+        console.log(shipmentData);
+        response = await axios.post(endpoint, shipmentData);
+      }
+
       openSnackBar("Shipment created", SnackbarMessageSeverity.Success);
       console.log("Shipment created:", response.data);
+      console.log();
+      if (email.trim() !== "") {
+        // Call sendEmailAPI function
+        sendEmailAPI(shipmentData);
+      }
       // Redirect to a success page or update the UI to show success message
     } catch (error) {
       openSnackBar("Error creating shipment", SnackbarMessageSeverity.Error);
@@ -272,6 +310,27 @@ export default function Shipment() {
               ))}
             </select>
           </div>
+          <div className="w-1/2 h-20">
+            {!keycloak.authenticated && (
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Email
+                </label>
+                <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full"
+                  required
+                />
+              </div>
+            )}
+          </div>
           <div>
             {price !== null && (
               <p className="text-gray-900 dark:text-white">
@@ -281,6 +340,7 @@ export default function Shipment() {
             <button
               type="submit"
               className="inline-flex justify-center items-center w-full px-4 py-2 text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              onClick={handleSubmit}
             >
               Create Shipment
             </button>

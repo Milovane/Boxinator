@@ -13,6 +13,7 @@ import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./keycloak";
 import UserPage from "./pages/UserPage"; // Import UserPage component
 import { Context } from "./context";
+import { useContext } from "react";
 import { useState } from "react";
 import ShipmentPage from "./pages/ShipmentPage";
 import CreateCountryForm from "./components/CountryComponents/CreateCountryForm";
@@ -23,6 +24,7 @@ function App() {
   const updateContext = (newContext) => {
     setContext({ ...context, ...newContext });
   };
+
   return (
     <>
       <ReactKeycloakProvider
