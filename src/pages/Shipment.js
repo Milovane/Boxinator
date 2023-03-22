@@ -4,6 +4,10 @@ import "./ShipmentCube.css";
 import { useContext } from "react";
 import { Context } from "../context";
 import keycloak from "../keycloak";
+import Snackbar from "@mui/material/Snackbar";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 const weightOptions = ["BASIC", "HUMBLE", "DELUXE", "PREMIUM"];
 const boxColors = [
@@ -18,6 +22,45 @@ const boxColors = [
 ];
 
 export default function Shipment() {
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+    snackbarMessage: "Message",
+  });
+  const { vertical, horizontal, open, snackbarMessage } = state;
+
+  // const handleClick = (newState) => () => {
+  //   setState({ open: true, ...newState });
+  // };
+
+  function openSnackBar(message) {
+    const idk = {
+      vertical: "bottom",
+      horizontal: "center",
+      snackbarMessage: message,
+    };
+
+    setState({ open: true, ...idk });
+  }
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   const [receiverName, setReceiverName] = useState("");
   const [weightOption, setWeightOption] = useState("");
   const [boxColor, setBoxColor] = useState("");
@@ -27,22 +70,22 @@ export default function Shipment() {
 
   const boxRef = useRef(null);
 
-const { context } = useContext(Context);
-const currentUser = context.user;
-const token = keycloak.token;
-console.log(token);
-const headers = {
-  Authorization: `Bearer ${token}`,
-};
+  const { context } = useContext(Context);
+  const currentUser = context.user;
+  const token = keycloak.token;
+  console.log(token);
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
 
-console.log(keycloak.token)
-
+  console.log(keycloak.token);
 
   useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/v1/countries", { headers: headers }
+          "http://localhost:8080/api/v1/countries",
+          { headers: headers }
         );
         setDestinationCountries(response.data);
       } catch (error) {
@@ -117,18 +160,20 @@ console.log(keycloak.token)
       destinationCountry: selectedCountry.name,
       price: price,
       userId: keycloak.subject,
-      
     };
-    console.log(shipmentData)
+    console.log(shipmentData);
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/shipments", shipmentData, { headers: headers }
+        "http://localhost:8080/api/v1/shipments",
+        shipmentData,
+        { headers: headers }
       );
-
+      openSnackBar("Shipment created");
       console.log("Shipment created:", response.data);
       // Redirect to a success page or update the UI to show success message
     } catch (error) {
+      openSnackBar("Error creating shipment");
       console.error("Error creating shipment:", error);
       // Show error message or handle error
     }
@@ -263,6 +308,16 @@ console.log(keycloak.token)
           </div>
         </div>
       </form>
+
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        message={snackbarMessage}
+        action={action}
+        key={vertical + horizontal}
+      />
     </div>
   );
 }
