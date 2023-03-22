@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import MuiAlert from "@mui/material/Alert";
 import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
+import SnackBarComponent from "../components/UserFeedback/SnackBarComponent";
 
 const weightOptions = ["BASIC", "HUMBLE", "DELUXE", "PREMIUM"];
 const boxColors = [
@@ -24,57 +25,20 @@ const boxColors = [
 ];
 
 export default function Shipment() {
-  const [state, setState] = React.useState({
-    open: false,
-    vertical: "top",
-    horizontal: "center",
-    snackbarMessage: "Message",
-    severity: "Severity",
-  });
-  const { vertical, horizontal, open, snackbarMessage, severity } = state;
-
-  // const handleClick = (newState) => () => {
-  //   setState({ open: true, ...newState });
-  // };
-
-  function openSnackBar(message, messageSeverity) {
-    const idk = {
-      vertical: "bottom",
-      horizontal: "center",
-      snackbarMessage: message,
-      severity: messageSeverity,
-    };
-
-    setState({ open: true, ...idk });
-  }
-
-  const handleClose = () => {
-    setState({ ...state, open: false });
-  };
-
-  const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
-
-  const action = (
-    <React.Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
-
   const [receiverName, setReceiverName] = useState("");
   const [weightOption, setWeightOption] = useState("");
   const [boxColor, setBoxColor] = useState("");
   const [destinationCountry, setDestinationCountry] = useState("");
   const [destinationCountries, setDestinationCountries] = useState([]);
   const [price, setPrice] = useState(null);
+
+  const [state, setState] = React.useState({
+    vertical: "bottom",
+    horizontal: "center",
+    open: false,
+    snackbarMessage: "Empty",
+    severity: "success",
+  });
 
   const boxRef = useRef(null);
 
@@ -92,8 +56,7 @@ export default function Shipment() {
     const fetchCountries = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/v1/countries",
-          { headers: headers }
+          "http://localhost:8080/api/v1/countries/list"
         );
         setDestinationCountries(response.data);
       } catch (error) {
@@ -185,6 +148,29 @@ export default function Shipment() {
       console.error("Error creating shipment:", error);
       // Show error message or handle error
     }
+  };
+
+  function openSnackBar(message, messageSeverity) {
+    const newState = {
+      vertical: "bottom",
+      horizontal: "center",
+      open: true,
+      snackbarMessage: message,
+      severity: messageSeverity,
+    };
+
+    setState({ ...newState });
+  }
+
+  const closeSnackbar = () => {
+    const newState = {
+      vertical: "bottom",
+      horizontal: "center",
+      open: false,
+      snackbarMessage: "",
+      severity: "success",
+    };
+    setState({ ...newState });
   };
 
   return (
@@ -317,18 +303,10 @@ export default function Shipment() {
         </div>
       </form>
 
-      <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
-        open={open}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        action={action}
-        key={vertical + horizontal}
-      >
-        <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      <SnackBarComponent
+        snackbarDetails={state}
+        closeSnack={() => closeSnackbar}
+      />
     </div>
   );
 }

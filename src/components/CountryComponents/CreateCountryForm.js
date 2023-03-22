@@ -34,7 +34,7 @@ const CreateCountryForm = () => {
     };
 
     axios
-      .post("http://localhost:8080/api/v1/countries", country, { headers: headers })
+      .post("http://localhost:8080/api/v1/countries/list", country)
       .then((response) => {
         console.log(response.data);
         if (response.request.status === 200) {
