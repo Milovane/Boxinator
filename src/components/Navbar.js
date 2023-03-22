@@ -7,8 +7,15 @@ import { useContext } from "react";
 import { Context } from "../context";
 import Button from "@mui/material/Button";
 import { ROLES } from "../const/roles";
+import SnackBarComponent from "./UserFeedback/SnackBarComponent";
+import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
 
 export const Navbar = () => {
+  const [state, setState] = React.useState({
+    open: false,
+    snackbarMessage: "Empty",
+    severity: "success",
+  });
   const { keycloak, initialized } = useKeycloak();
   const navigate = useNavigate();
   const { context, updateContext } = useContext(Context);
@@ -99,7 +106,11 @@ export const Navbar = () => {
         //navigate("/shipment");
       } else {
         //User does not exist
-        alert("user does not exist, navigate to register page");
+        //alert("You do not have an account, redirecting to register page");
+        openSnackBar(
+          "You do not have an account, redirecting to register page",
+          SnackbarMessageSeverity.Error
+        );
         navigate("/register");
         //for testing purposes, basic guest user
         //postGuestUser();
@@ -113,6 +124,25 @@ export const Navbar = () => {
     navigate("/");
     keycloak.logout();
   }
+
+  function openSnackBar(message, messageSeverity) {
+    const newState = {
+      open: true,
+      snackbarMessage: message,
+      severity: messageSeverity,
+    };
+
+    setState({ ...newState });
+  }
+
+  const closeSnackbar = () => {
+    const newState = {
+      open: false,
+      snackbarMessage: "",
+      severity: "success",
+    };
+    setState({ ...newState });
+  };
 
   return (
     <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
@@ -174,6 +204,10 @@ export const Navbar = () => {
           )} */}
         </div>
       </div>
+      <SnackBarComponent
+        snackbarDetails={state}
+        closeSnack={() => closeSnackbar}
+      />
     </nav>
   );
 };
