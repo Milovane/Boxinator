@@ -5,8 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MuiAlert from "@mui/material/Alert";
 
 const SnackBarComponent = (props) => {
-  const { vertical, horizontal, open, snackbarMessage, severity } =
-    props.snackbarDetails;
+  const { open, snackbarMessage, severity } = props.snackbarDetails;
 
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -27,12 +26,12 @@ const SnackBarComponent = (props) => {
 
   return (
     <Snackbar
-      anchorOrigin={{ vertical, horizontal }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       open={open}
       autoHideDuration={3000}
       onClose={props.closeSnack()}
       action={action}
-      key={vertical + horizontal}
+      key={{ vertical: "bottom", horizontal: "center" }}
     >
       <Alert
         onClose={props.closeSnack()}
