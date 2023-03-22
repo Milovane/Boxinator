@@ -31,8 +31,6 @@ export default function Shipment() {
   const [price, setPrice] = useState(null);
 
   const [state, setState] = React.useState({
-    vertical: "bottom",
-    horizontal: "center",
     open: false,
     snackbarMessage: "Empty",
     severity: "success",
@@ -179,8 +177,6 @@ export default function Shipment() {
 
   function openSnackBar(message, messageSeverity) {
     const newState = {
-      vertical: "bottom",
-      horizontal: "center",
       open: true,
       snackbarMessage: message,
       severity: messageSeverity,
@@ -191,8 +187,6 @@ export default function Shipment() {
 
   const closeSnackbar = () => {
     const newState = {
-      vertical: "bottom",
-      horizontal: "center",
       open: false,
       snackbarMessage: "",
       severity: "success",
