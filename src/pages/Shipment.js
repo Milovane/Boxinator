@@ -5,6 +5,9 @@ import { useContext } from "react";
 import { Context } from "../context";
 import keycloak from "../keycloak";
 import { sendEmailAPI } from "../Email";
+import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
+import SnackBarComponent from "../components/UserFeedback/SnackBarComponent";
+
 const weightOptions = ["BASIC", "HUMBLE", "DELUXE", "PREMIUM"];
 const boxColors = [
   "Red",
@@ -26,6 +29,15 @@ export default function Shipment() {
   const [destinationCountry, setDestinationCountry] = useState("");
   const [destinationCountries, setDestinationCountries] = useState([]);
   const [price, setPrice] = useState(null);
+
+  const [state, setState] = React.useState({
+    vertical: "bottom",
+    horizontal: "center",
+    open: false,
+    snackbarMessage: "Empty",
+    severity: "success",
+  });
+
   const boxRef = useRef(null);
   const currentUser = context.user;
   const token = keycloak.token;
@@ -33,6 +45,8 @@ export default function Shipment() {
   const headers = {
     Authorization: `Bearer ${token}`,
   };
+
+  console.log(token);
 
   console.log(keycloak.token);
 
@@ -115,7 +129,7 @@ export default function Shipment() {
       shipmentData = {
         receiverName: receiverName,
         weightOption: weightOption,
-        boxColour: boxColor,
+        boxColor: boxColor,
         destinationCountry: selectedCountry.name,
         price: price,
         userId: keycloak.subject,
@@ -125,7 +139,7 @@ export default function Shipment() {
       shipmentData = {
         receiverName: receiverName,
         weightOption: weightOption,
-        boxColour: boxColor,
+        boxColor: boxColor,
         destinationCountry: selectedCountry.name,
         user: {
           email: email,
@@ -148,6 +162,7 @@ export default function Shipment() {
         response = await axios.post(endpoint, shipmentData);
       }
 
+      openSnackBar("Shipment created", SnackbarMessageSeverity.Success);
       console.log("Shipment created:", response.data);
       console.log();
       if (email.trim() !== "") {
@@ -156,9 +171,33 @@ export default function Shipment() {
       }
       // Redirect to a success page or update the UI to show success message
     } catch (error) {
+      openSnackBar("Error creating shipment", SnackbarMessageSeverity.Error);
       console.error("Error creating shipment:", error);
       // Show error message or handle error
     }
+  };
+
+  function openSnackBar(message, messageSeverity) {
+    const newState = {
+      vertical: "bottom",
+      horizontal: "center",
+      open: true,
+      snackbarMessage: message,
+      severity: messageSeverity,
+    };
+
+    setState({ ...newState });
+  }
+
+  const closeSnackbar = () => {
+    const newState = {
+      vertical: "bottom",
+      horizontal: "center",
+      open: false,
+      snackbarMessage: "",
+      severity: "success",
+    };
+    setState({ ...newState });
   };
 
   return (
@@ -312,6 +351,11 @@ export default function Shipment() {
           </div>
         </div>
       </form>
+
+      <SnackBarComponent
+        snackbarDetails={state}
+        closeSnack={() => closeSnackbar}
+      />
     </div>
   );
 }
