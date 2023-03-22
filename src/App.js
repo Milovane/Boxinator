@@ -15,6 +15,7 @@ import UserPage from "./pages/UserPage"; // Import UserPage component
 import { Context } from "./context";
 import { useState } from "react";
 import ShipmentPage from "./pages/ShipmentPage";
+import CreateCountryForm from "./components/CountryComponents/CreateCountryForm";
 
 function App() {
   const [context, setContext] = useState({});
@@ -45,10 +46,10 @@ function App() {
                 <Route path="/create-shipment" element={<Shipment />} />
 
                 <Route
-                  path="/admin"
+                  path="/country"
                   element={
                     <KeycloakRoute role={ROLES.Admin}>
-                      <AdminPage />
+                      <CreateCountryForm />
                     </KeycloakRoute>
                   }
                 />
