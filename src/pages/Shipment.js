@@ -8,6 +8,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import MuiAlert from "@mui/material/Alert";
 
 const weightOptions = ["BASIC", "HUMBLE", "DELUXE", "PREMIUM"];
 const boxColors = [
@@ -27,18 +28,20 @@ export default function Shipment() {
     vertical: "top",
     horizontal: "center",
     snackbarMessage: "Message",
+    severity: "Severity",
   });
-  const { vertical, horizontal, open, snackbarMessage } = state;
+  const { vertical, horizontal, open, snackbarMessage, severity } = state;
 
   // const handleClick = (newState) => () => {
   //   setState({ open: true, ...newState });
   // };
 
-  function openSnackBar(message) {
+  function openSnackBar(message, messageSeverity) {
     const idk = {
       vertical: "bottom",
       horizontal: "center",
       snackbarMessage: message,
+      severity: messageSeverity,
     };
 
     setState({ open: true, ...idk });
@@ -47,6 +50,10 @@ export default function Shipment() {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
   const action = (
     <React.Fragment>
@@ -169,11 +176,11 @@ export default function Shipment() {
         shipmentData,
         { headers: headers }
       );
-      openSnackBar("Shipment created");
+      openSnackBar("Shipment created", "success");
       console.log("Shipment created:", response.data);
       // Redirect to a success page or update the UI to show success message
     } catch (error) {
-      openSnackBar("Error creating shipment");
+      openSnackBar("Error creating shipment", "error");
       console.error("Error creating shipment:", error);
       // Show error message or handle error
     }
@@ -314,10 +321,13 @@ export default function Shipment() {
         open={open}
         autoHideDuration={3000}
         onClose={handleClose}
-        message={snackbarMessage}
         action={action}
         key={vertical + horizontal}
-      />
+      >
+        <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
