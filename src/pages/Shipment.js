@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import MuiAlert from "@mui/material/Alert";
+import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
 
 const weightOptions = ["BASIC", "HUMBLE", "DELUXE", "PREMIUM"];
 const boxColors = [
@@ -176,11 +177,11 @@ export default function Shipment() {
         shipmentData,
         { headers: headers }
       );
-      openSnackBar("Shipment created", "success");
+      openSnackBar("Shipment created", SnackbarMessageSeverity.Success);
       console.log("Shipment created:", response.data);
       // Redirect to a success page or update the UI to show success message
     } catch (error) {
-      openSnackBar("Error creating shipment", "error");
+      openSnackBar("Error creating shipment", SnackbarMessageSeverity.Error);
       console.error("Error creating shipment:", error);
       // Show error message or handle error
     }
