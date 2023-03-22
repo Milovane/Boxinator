@@ -5,11 +5,6 @@ import { useContext } from "react";
 import { Context } from "../context";
 import keycloak from "../keycloak";
 import { sendEmailAPI } from "../Email";
-import Snackbar from "@mui/material/Snackbar";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import MuiAlert from "@mui/material/Alert";
 import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
 import SnackBarComponent from "../components/UserFeedback/SnackBarComponent";
 
@@ -51,13 +46,7 @@ export default function Shipment() {
     Authorization: `Bearer ${token}`,
   };
 
-  const { context } = useContext(Context);
-  const currentUser = context.user;
-  const token = keycloak.token;
   console.log(token);
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
 
   console.log(keycloak.token);
 
@@ -140,7 +129,7 @@ export default function Shipment() {
       shipmentData = {
         receiverName: receiverName,
         weightOption: weightOption,
-        boxColour: boxColor,
+        boxColor: boxColor,
         destinationCountry: selectedCountry.name,
         price: price,
         userId: keycloak.subject,
@@ -150,7 +139,7 @@ export default function Shipment() {
       shipmentData = {
         receiverName: receiverName,
         weightOption: weightOption,
-        boxColour: boxColor,
+        boxColor: boxColor,
         destinationCountry: selectedCountry.name,
         user: {
           email: email,
