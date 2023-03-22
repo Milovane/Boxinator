@@ -15,8 +15,6 @@ const CreateCountryForm = () => {
     countryMultiplier: "",
   });
 
-  console.log(keycloak.token);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCountry((prevState) => ({
@@ -25,26 +23,55 @@ const CreateCountryForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const token = keycloak.token;
     console.log(token);
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-
-    axios
-      .post("http://localhost:8080/api/v1/countries", country, { headers: headers })
-      .then((response) => {
-        console.log(response.data);
-        if (response.request.status === 200) {
-          updateContext(response.data);
-          navigate("/country"); // Update this to the desired path after creating a country
+  
+    try {
+      // First, check if a country with the same name already exists
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/countries/name/${country.name}`,
+        {
+          headers: headers,
         }
-      })
-      .catch((error) => {
+      );
+  
+      // If the country already exists, update the countryMultiplier value
+      if (response.data && response.data.id) {
+        const updateResponse = await axios.put(
+          `http://localhost:8080/api/v1/countries/${response.data.id}`,
+          { ...country, id: response.data.id },
+          { headers: headers }
+        );
+  
+        console.log(updateResponse.data);
+        updateContext(updateResponse.data);
+        navigate("/country"); // Update this to the desired path after updating a country
+      }
+    } catch (error) {
+      console.log(error);
+  
+      // If the country doesn't exist, create a new one
+      try {
+        const createResponse = await axios.post(
+          "http://localhost:8080/api/v1/countries",
+          country,
+          {
+            headers: headers,
+          }
+        );
+  
+        console.log(createResponse.data);
+        updateContext(createResponse.data);
+        navigate("/country"); // Update this to the desired path after creating a country
+      } catch (error) {
         console.log(error);
-      });
+      }
+    }
   };
 
   return (
@@ -53,7 +80,8 @@ const CreateCountryForm = () => {
       buttonName={"Create Country"}
       country={country}
       handleChange={handleChange}
-    ></CountryForm>
+      updateCountry={false}
+    />
   );
 };
 
