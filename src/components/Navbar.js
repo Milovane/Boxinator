@@ -15,7 +15,6 @@ export const Navbar = () => {
   console.log("Context: " + JSON.stringify(context));
   async function checkAuthentication() {
     if (keycloak.authenticated) {
-      console.log("HIHIHH");
       fetchUserWithId();
     }
   }
