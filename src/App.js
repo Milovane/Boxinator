@@ -3,7 +3,6 @@ import HomePage from "./pages/HomePage";
 import { Navbar } from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HistoryPage } from "./pages/HistoryPage";
-import { AdminPage } from "./pages/AdminPage";
 import React from "react";
 import RegisterForm from "./RegisterForm";
 import Shipment from "./pages/Shipment";
@@ -17,6 +16,8 @@ import { useContext } from "react";
 import { useState } from "react";
 import ShipmentPage from "./pages/ShipmentPage";
 import CreateCountryForm from "./components/CountryComponents/CreateCountryForm";
+import AdminPage from "./pages/AdminPage";
+import ManageShipmentsPage from "./pages/ManageShipmentsPage";
 
 function App() {
   const [context, setContext] = useState({});
@@ -48,6 +49,15 @@ function App() {
                 <Route path="/create-shipment" element={<Shipment />} />
 
                 <Route
+                  path="/admin"
+                  element={
+                    <KeycloakRoute role={ROLES.Admin}>
+                      <AdminPage />
+                    </KeycloakRoute>
+                  }
+                />
+
+                <Route
                   path="/country"
                   element={
                     <KeycloakRoute role={ROLES.Admin}>
@@ -55,6 +65,16 @@ function App() {
                     </KeycloakRoute>
                   }
                 />
+
+                <Route
+                  path="/manage-shipments"
+                  element={
+                    <KeycloakRoute role={ROLES.Admin}>
+                      <ManageShipmentsPage keycloak={keycloak} />
+                    </KeycloakRoute>
+                  }
+                />
+
                 <Route path="/history" element={<HistoryPage />}></Route>
                 {keycloak.authenticated && (
                   <Route path="/user" element={<UserPage />} />
