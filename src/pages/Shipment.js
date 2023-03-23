@@ -16,13 +16,21 @@ import "../styles/shipment.css";
 const weightOptions = ["BASIC", "HUMBLE", "DELUXE", "PREMIUM"];
 const boxColors = [
   "Red",
-  "Blue",
-  "Green",
-  "Yellow",
   "Orange",
-  "White",
-  "Black",
+  "Brown",
+
+  "Yellow",
+  "Gold",
+  "Lime",
+  "Green",
+  "Turquoise",
+  "Blue",
+  "Navy",
+  "Purple",
   "Pink",
+  "White",
+  "Grey",
+  "Black",
 ];
 
 export default function Shipment() {
@@ -47,8 +55,6 @@ export default function Shipment() {
   const headers = {
     Authorization: `Bearer ${token}`,
   };
-
-
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -274,11 +280,7 @@ export default function Shipment() {
           />
         </div>
         <div className="cubeContainer">
-          <div
-            ref={boxRef}
-            className="cube"
-    
-          >
+          <div ref={boxRef} className="cube">
             <div className="face top"></div>
             <div className="face bottom"></div>
             <div className="face left"></div>
