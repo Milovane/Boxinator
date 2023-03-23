@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AdminShipmentCard from "../ShipmentComponents/AdminShipmentCard";
+import AdminShipmentCard from "../components/ShipmentComponents/AdminShipmentCard";
 import axios from "axios";
 
 const ManageShipmentsPage = ({ keycloak }) => {

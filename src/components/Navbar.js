@@ -163,7 +163,7 @@ export const Navbar = () => {
 
             {keycloak.authenticated && keycloak.hasRealmRole(ROLES.Admin) && (
               <>
-                <Link link="/country" name="Countries" />
+                <Link link="/admin" name="Admin" />
               </>
             )}
 
