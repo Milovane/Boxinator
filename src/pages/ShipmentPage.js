@@ -43,7 +43,12 @@ const ShipmentPage = ({ keycloak }) => {
   return (
     <div className="relative">
     <div className="mt-6">
-      <h1 className="text-xl font-bold mb-4">Your Shipments</h1>
+    <div className="bg-white rounded p-4 mb-8">
+        <h1 className="text-2xl font-bold mb-2">Your Shipments</h1>
+        <p className="text-black-600">
+          Here you can view all your shipments. Clicking a shipment shows you the status updates.
+        </p>
+      </div>
       <div className="flex justify-around">
         <div className="w-1/3">
           <h2 className="text-2xl font-semibold mb-4 text-white bg-green-600 px-4 py-2 rounded-md">Active Shipments</h2>

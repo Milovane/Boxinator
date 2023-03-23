@@ -122,7 +122,10 @@ const AdminShipmentCard = ({ shipment, keycloak, onStatusUpdate }) => {
     >
       <div className="flex justify-between items-start">
         <div>
-          <div className="text-lg font-bold mb-2">{receiverName}</div>
+          <div className="text-lg font-bold mb-2">
+            {shipment.user.firstName} {shipment.user.lastName}
+          </div>
+          <div className="text-sm mb-2">Receiver Name: {receiverName}</div>
           <div className="text-sm mb-2">Weight Option: {weightOption}</div>
           <div className="text-sm mb-2">Box Color: {boxColor}</div>
           <div className="text-sm mb-2">
@@ -152,6 +155,7 @@ const AdminShipmentCard = ({ shipment, keycloak, onStatusUpdate }) => {
               id={`status-${shipment.id}`}
               value={latestStatus.shipmentStatus}
               onChange={handleStatusChange}
+              onClick={(e) => e.stopPropagation()}
             >
               {Object.keys(statusMap).map((status) => (
                 <option key={status} value={status}>
