@@ -25,13 +25,29 @@ const ManageShipmentsPage = ({ keycloak }) => {
     }
   }, [keycloak.token]);
 
+  const handleStatusUpdate = (shipmentId, newShipmentStatusHistory) => {
+    setShipments((prevShipments) =>
+      prevShipments.map((shipment) =>
+        shipment.id === shipmentId
+          ? {
+              ...shipment,
+              shipmentHistory: [
+                ...shipment.shipmentHistory,
+                newShipmentStatusHistory,
+              ],
+            }
+          : shipment
+      )
+    );
+  };
+
   return (
     <div className="mt-6">
       <h1 className="text-xl font-bold mb-4">Manage Shipments</h1>
       <div className="flex flex-wrap">
         {shipments.map((shipment) => (
           <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 mb-4" key={shipment.id}>
-            <AdminShipmentCard shipment={shipment} />
+            <AdminShipmentCard shipment={shipment} keycloak={keycloak} onStatusUpdate={handleStatusUpdate} />
           </div>
         ))}
       </div>
