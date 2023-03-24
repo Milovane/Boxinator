@@ -12,6 +12,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import "../styles/shipment.css";
+import InfoIcon from "@mui/icons-material/Info";
 
 const weightOptions = ["BASIC", "HUMBLE", "DELUXE", "PREMIUM"];
 const boxColors = [
@@ -203,98 +204,110 @@ export default function Shipment() {
   };
 
   return (
-    <div className="shipmentContainer">
-      <div className="optionsDiv">
-        <TextField
-          required
-          id="receiverName"
-          label="Receiver name"
-          value={receiverName}
-          onChange={(e) => setReceiverName(e.target.value)}
-          fullWidth
-        />
-        <TextField
-          id="weightOption"
-          select
-          label="Weight option"
-          onChange={(e) => setWeightOption(e.target.value)}
-          value={weightOption}
-          fullWidth
-        >
-          {weightOptions.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          id="boxColors"
-          select
-          label="Box color"
-          onChange={(e) => setBoxColor(e.target.value)}
-          value={boxColor}
-          fullWidth
-        >
-          {boxColors.map((color) => (
-            <MenuItem key={color} value={color}>
-              {color}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          id="destinationCountry"
-          select
-          label="Destination country"
-          onChange={(e) => setDestinationCountry(e.target.value)}
-          value={destinationCountry}
-          fullWidth
-        >
-          {destinationCountries.map((country) => (
-            <MenuItem key={country.id} value={country.id}>
-              {country.name}
-            </MenuItem>
-          ))}
-        </TextField>
-        {!keycloak.authenticated && (
+    <>
+      <div className="shipmentContainer container md:mx-auto mt-32 mb-5 rounded-lg">
+        <div className="optionsDiv">
           <TextField
             required
-            id="email"
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="receiverName"
+            label="Receiver name"
+            value={receiverName}
+            onChange={(e) => setReceiverName(e.target.value)}
             fullWidth
           />
-        )}
-        <Button type="submit" onClick={handleSubmit} variant="contained">
-          Create Shipment
-        </Button>
-      </div>
-      <div className="receiptContainer">
-        <div>
-          <Receipt
-            weightOption={weightOption}
-            boxColor={boxColor}
-            destinationCountry={destinationCountry}
-            destinationCountries={destinationCountries}
-            price={price}
-          />
+          <TextField
+            id="weightOption"
+            select
+            label="Weight option"
+            onChange={(e) => setWeightOption(e.target.value)}
+            value={weightOption}
+            fullWidth
+          >
+            {weightOptions.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="boxColors"
+            select
+            label="Box color"
+            onChange={(e) => setBoxColor(e.target.value)}
+            value={boxColor}
+            fullWidth
+          >
+            {boxColors.map((color) => (
+              <MenuItem key={color} value={color}>
+                {color}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="destinationCountry"
+            select
+            label="Destination country"
+            onChange={(e) => setDestinationCountry(e.target.value)}
+            value={destinationCountry}
+            fullWidth
+          >
+            {destinationCountries.map((country) => (
+              <MenuItem key={country.id} value={country.id}>
+                {country.name}
+              </MenuItem>
+            ))}
+          </TextField>
+          {!keycloak.authenticated && (
+            <TextField
+              required
+              id="email"
+              label="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+            />
+          )}
+          <Button type="submit" onClick={handleSubmit} variant="contained">
+            Create Shipment
+          </Button>
         </div>
-        <div className="cubeContainer">
-          <div ref={boxRef} className="cube">
-            <div className="face top"></div>
-            <div className="face bottom"></div>
-            <div className="face left"></div>
-            <div className="face right"></div>
-            <div className="face front"></div>
-            <div className="face back"></div>
+        <div className="receiptContainer">
+          <div>
+            <Receipt
+              weightOption={weightOption}
+              boxColor={boxColor}
+              destinationCountry={destinationCountry}
+              destinationCountries={destinationCountries}
+              price={price}
+            />
+          </div>
+          <div className="cubeContainer">
+            <div ref={boxRef} className="cube">
+              <div className="face top"></div>
+              <div className="face bottom"></div>
+              <div className="face left"></div>
+              <div className="face right"></div>
+              <div className="face front"></div>
+              <div className="face back"></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <SnackBarComponent
-        snackbarDetails={state}
-        closeSnack={() => closeSnackbar}
-      />
-    </div>
+        <SnackBarComponent
+          snackbarDetails={state}
+          closeSnack={() => closeSnackbar}
+        />
+      </div>
+      {!keycloak.authenticated && (
+        <div className="shipmentContainer container md:mx-auto mt-[10px] mb-24 bg-white p-5 rounded-lg">
+          <p>
+            <span className="text-blue-600">
+              <InfoIcon />
+            </span>
+            You are not logged in and will add a shipment as a guest user
+          </p>
+        </div>
+      )}
+    </>
   );
 }
