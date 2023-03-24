@@ -203,7 +203,7 @@ export default function Shipment() {
   };
 
   return (
-    <div className="shipmentContainer">
+    <div className="shipmentContainer container md:mx-auto mt-32 mb-24 rounded-lg">
       <div className="optionsDiv">
         <TextField
           required
