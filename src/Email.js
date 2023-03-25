@@ -6,11 +6,11 @@ export function sendEmailAPI(data) {
                 Destination: ${data.destinationCountry}
                 receivers name: ${data.receiverName},
                 Weight Option: ${data.weightOption},
-                Email: ${data.user.email}
+                Email: ${data.guestUserDto.email}
                 \n\n
                 You are currently not registered, we recommend you do that. You can register at: 
                 ${keycloak.createRegisterUrl()}`;
-  const value = { to_email: data.user.email, message: message };
+  const value = { to_email: data.guestUserDto.email, message: message };
 
   emailjs
     .send("service_sjcyp06", "template_7n5eoif", value, "AcByZELhzs0z1Lh3v")
