@@ -18,6 +18,7 @@ import ShipmentPage from "./pages/ShipmentPage";
 import CreateCountryForm from "./components/CountryComponents/CreateCountryForm";
 import AdminPage from "./pages/AdminPage";
 import ManageShipmentsPage from "./pages/ManageShipmentsPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   const [context, setContext] = useState({});
@@ -78,6 +79,9 @@ function App() {
                 <Route path="/history" element={<HistoryPage />}></Route>
                 {keycloak.authenticated && (
                   <Route path="/user" element={<UserPage />} />
+                )}
+                {keycloak.authenticated && (
+                  <Route path="/profile" element={<ProfilePage />} />
                 )}
               </Routes>
             </main>

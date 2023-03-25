@@ -157,7 +157,8 @@ export const Navbar = () => {
             {keycloak.authenticated && (
               <>
                 <Link link="/shipment" name="Shipment" />
-                <Link link="/user" name="Profile"></Link>
+                {/* <Link link="/user" name="Profile"></Link> */}
+                <Link link="/profile" name="Profile"></Link>
               </>
             )}
             {!keycloak.authenticated && (
