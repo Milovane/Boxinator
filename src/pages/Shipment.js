@@ -148,11 +148,10 @@ export default function Shipment() {
         weightOption: weightOption,
         boxColor: boxColor,
         destinationCountry: selectedCountry.name,
-        user: {
+        guestUserDto: {
           email: email,
           typeOfUser: "Guest",
         },
-        shipmentHistory: [],
         price: price,
       };
       endpoint = `http://localhost:8080/api/v1/shipments/createGuestShipment/${email}`;
@@ -165,16 +164,27 @@ export default function Shipment() {
           headers: headers,
         });
       } else {
+        console.log("Posting guest shipment");
         console.log(shipmentData);
-        response = await axios.post(endpoint, shipmentData);
+        response = await axios
+          .post(endpoint, shipmentData)
+          .then((response) => {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
 
       openSnackBar("Shipment created", SnackbarMessageSeverity.Success);
-      console.log("Shipment created:", response.data);
+      //console.log("Shipment created:", response.data);
       console.log();
       if (email.trim() !== "") {
         // Call sendEmailAPI function
-        sendEmailAPI(shipmentData);
+        if (!keycloak.authenticated) {
+          //Only guest users will get an email
+          sendEmailAPI(shipmentData);
+        }
       }
       // Redirect to a success page or update the UI to show success message
     } catch (error) {
