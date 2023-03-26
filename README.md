@@ -1,70 +1,47 @@
-# Getting Started with Create React App
+# Boxinator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+Boxinator is a service that provides shipping of mystery boxes.
+This repository contains the frontend functionality of the system.
+The backend part can be found in this [repository](https://github.com/SethOberg/boxinatorAPI).
 
-In the project directory, you can run:
+## User roles
 
-### `npm start`
+Boxinator has the following types of roles:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Guests
+- Registered users
+- Admin users
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Boxinator allows users to create an account, log in, create shipments and view their current shipments.
+Guest users can enter an email when creating shipments and will get a confirmation email when their shipment has been created.
+Registered users will be able to log in and view their shipments.
 
-### `npm test`
+Admin users have access to extra pages for managing shipments and their status.
+Admin users also have the ability to update and add new countries with a multiplier, which determines the price of the shipment process.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Authentication and authorization
 
-### `npm run build`
+The project is built with react and uses keycloak as an identity provider. When logging in, a JSON web token is recieved from keycloak, which is sent to the backend for authentication and authorization of the logged in user.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+When opening the web page, the users will be able to create an account via keycloak if they have not already created one.
+After a successful account creation, the user will need to register via boxinator to create an account at boxinator as well.
+After the second registration, the keycloak identity will be linked to a user account at boxinator with the help of the subject id recieved from keycloak.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Technologies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- HTML
+- CSS
+- Tailwind CSS
+- Material UI
+- Javascript Fetch API
+- Axios
+- JWT
+- Keycloak
 
-### `npm run eject`
+## Contributors
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Ali Habesh
+- Milovan Glisovic
+- Seth Öberg
