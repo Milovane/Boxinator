@@ -6,14 +6,24 @@ const ShipmentPage = ({ keycloak }) => {
   const [shipments, setShipments] = useState([]);
 
   const filterShipments = (status) => {
-    return shipments.filter((shipment) => {
-      const latestStatus =
-        shipment.shipmentHistory[shipment.shipmentHistory.length - 1]
-          .shipmentStatus;
-      return status.includes(latestStatus);
-    });
+    return shipments
+      .filter((shipment) => {
+        const latestStatus = shipment.shipmentHistory[0].shipmentStatus;
+        return status.includes(latestStatus);
+      })
+      .sort((a, b) => {
+        const aStatus = a.shipmentHistory[0].shipmentStatus;
+        const bStatus = b.shipmentHistory[0].shipmentStatus;
+        const aDate = new Date(a.shipmentHistory[0].createdAt);
+        const bDate = new Date(b.shipmentHistory[0].createdAt);
+  
+        if (aStatus === bStatus) {
+          return bDate - aDate;
+        }
+  
+        return aStatus.localeCompare(bStatus);
+      });
   };
-
   const handleCreateShipmentClick = () => {
     window.location.href = "/create-shipment";
   };
@@ -28,12 +38,20 @@ const ShipmentPage = ({ keycloak }) => {
           },
         }
       );
-      setShipments(response.data);
-      console.log("Fetched shipments:", response.data);
+      const sortedShipments = response.data.map((shipment) => ({
+        ...shipment,
+        shipmentHistory: shipment.shipmentHistory.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        ),
+      }));
+  
+      setShipments(sortedShipments);
+      console.log("Fetched shipments:", sortedShipments);
     } catch (error) {
       console.error("Error fetching shipments:", error);
     }
   };
+
   useEffect(() => {
     if (keycloak.authenticated && keycloak.token) {
       fetchShipments();

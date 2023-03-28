@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const ShipmentCard = ({ shipment }) => {
+
+const ShipmentCard = ({ shipment, keycloak }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [shipmentHistory, setShipmentHistory] = useState(shipment.shipmentHistory);
+
   const {
     receiverName,
     weightOption,
     boxColor,
     destinationCountry,
     price,
-    shipmentHistory,
+    
   } = shipment;
 
-  const latestStatus = shipmentHistory[shipmentHistory.length - 1];
+  const latestStatus = shipmentHistory.sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  )[0];
 
   const statusMap = {
     CREATED: 0,
@@ -20,10 +26,28 @@ const ShipmentCard = ({ shipment }) => {
     COMPLETED: 3,
   };
 
+  const fetchShipmentDetails = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/shipments/${shipment.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${keycloak.token}`,
+          },
+        }
+      );
+      const updatedShipment = response.data;
+      setShipmentHistory(updatedShipment.shipmentHistory);
+    } catch (error) {
+      console.error("Error fetching shipment details:", error);
+    }
+  };
+
   const renderStatusMap = () => {
     const map = [];
     const cancelled = latestStatus.shipmentStatus === "CANCELLED";
     const completed = latestStatus.shipmentStatus === "COMPLETED";
+    console.log(latestStatus)
     for (let i = 0; i < 4; i++) {
       map.push(
         <span
@@ -63,6 +87,9 @@ const ShipmentCard = ({ shipment }) => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.toLocaleTimeString()}`;
   };
 
+  useEffect(() => {
+    fetchShipmentDetails();
+  }, []);
 
   return (
     <div
