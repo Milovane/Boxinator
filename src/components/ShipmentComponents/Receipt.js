@@ -25,6 +25,8 @@ const Receipt = ({
     ? selectedCountry.countryMultiplier
     : 0;
 
+    
+
   return (
     <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md w-full h-48 mb-4 receiptCard">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -48,7 +50,7 @@ const Receipt = ({
             {weight * countryMultiplier}
             <br />
             <br />
-            <strong>Final Price: {flatFee + weight * countryMultiplier}</strong>
+            <strong>Final Price: {price}</strong>
           </p>
         </>
       )}
