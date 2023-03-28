@@ -57,10 +57,12 @@ const ShipmentCard = ({ shipment }) => {
     setShowDetails(!showDetails);
   };
 
+  
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.toLocaleTimeString()}`;
   };
+
 
   return (
     <div
@@ -84,11 +86,13 @@ const ShipmentCard = ({ shipment }) => {
         <div className="bg-gray-100 p-4 mt-4 rounded">
           <div className="font-bold mb-2">Shipment History:</div>
           <ul className="list-disc pl-4">
-            {shipmentHistory.map((historyItem) => (
-              <li key={historyItem.Id}>
-                {historyItem.shipmentStatus} - {formatDate(historyItem.createdAt)}
-              </li>
-            ))}
+            {shipmentHistory
+              .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+              .map((historyItem) => (
+                <li key={historyItem.Id}>
+                  {historyItem.shipmentStatus} - {formatDate(historyItem.createdAt)}
+                </li>
+              ))}
           </ul>
         </div>
       )}
