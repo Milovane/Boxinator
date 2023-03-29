@@ -1,6 +1,6 @@
 import React from "react";
 import { Logo } from "./login-components/Logo";
-import Link from "./navbar-components/Link";
+import NavbarLink from "./navbar-components/Link";
 import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -153,23 +153,23 @@ export const Navbar = () => {
           id="navbar-sticky"
         >
           <ul className="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <Link link="/" name="Home" />
+            <NavbarLink link="/" name="Home" />
             {keycloak.authenticated && (
               <>
-                <Link link="/shipment" name="Shipment" />
+                <NavbarLink link="/shipment" name="Shipment" />
                 {/* <Link link="/user" name="Profile"></Link> */}
-                <Link link="/profile" name="Profile"></Link>
+                <NavbarLink link="/profile" name="Profile"></NavbarLink>
               </>
             )}
             {!keycloak.authenticated && (
               <>
-                <Link link="/create-shipment" name="Create shipment" />
+                <NavbarLink link="/create-shipment" name="Create shipment" />
               </>
             )}
 
             {keycloak.authenticated && keycloak.hasRealmRole(ROLES.Admin) && (
               <>
-                <Link link="/admin" name="Admin" />
+                <NavbarLink link="/admin" name="Admin" />
               </>
             )}
 
