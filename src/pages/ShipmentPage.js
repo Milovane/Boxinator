@@ -72,9 +72,9 @@ const ShipmentPage = ({ keycloak }) => {
             the status updates.
           </p>
         </div>
-        <div className="flex justify-around">
-          <div className="w-1/3">
-            <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-l-md">
+        <div className="grid md:grid-cols-3">
+          <div>
+            <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-md sm:rounded-l-md sm:rounded-r-none">
               <span className="text-green-700">
                 <LocalShippingIcon fontSize={fontSizeMUIIcons} />
               </span>
@@ -86,8 +86,8 @@ const ShipmentPage = ({ keycloak }) => {
               )
             )}
           </div>
-          <div className="w-1/3">
-            <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-none">
+          <div>
+            <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-md sm:rounded-none">
               <span className="text-yellow-400">
                 <CheckCircleIcon fontSize={fontSizeMUIIcons} />
               </span>
@@ -97,8 +97,8 @@ const ShipmentPage = ({ keycloak }) => {
               <ShipmentCard key={shipment.id} shipment={shipment} />
             ))}
           </div>
-          <div className="w-1/3">
-            <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-r-md">
+          <div>
+            <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-md sm:rounded-r-md sm:rounded-l-none">
               <span className="text-red-700">
                 <CancelIcon fontSize={fontSizeMUIIcons} />
               </span>
