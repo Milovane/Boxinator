@@ -63,7 +63,7 @@ const ShipmentPage = ({ keycloak }) => {
   }, [keycloak.token]);
 
   return (
-    <div className="relative">
+    <div className="w-full md:w-auto">
       <div className="mt-6">
         <div className="bg-white rounded p-4 mb-8">
           <h1 className="text-2xl font-bold mb-2">Your Shipments</h1>
@@ -73,7 +73,7 @@ const ShipmentPage = ({ keycloak }) => {
           </p>
         </div>
         <div className="grid md:grid-cols-3">
-          <div>
+          <div className="mb-10">
             <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-md md:rounded-l-md md:rounded-r-none">
               <span className="text-green-700">
                 <LocalShippingIcon fontSize={fontSizeMUIIcons} />
@@ -86,7 +86,7 @@ const ShipmentPage = ({ keycloak }) => {
               )
             )}
           </div>
-          <div>
+          <div className="mb-10">
             <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-md md:rounded-none">
               <span className="text-yellow-400">
                 <CheckCircleIcon fontSize={fontSizeMUIIcons} />
@@ -97,7 +97,7 @@ const ShipmentPage = ({ keycloak }) => {
               <ShipmentCard key={shipment.id} shipment={shipment} />
             ))}
           </div>
-          <div>
+          <div className="mb-20">
             <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-md md:rounded-r-md md:rounded-l-none">
               <span className="text-red-700">
                 <CancelIcon fontSize={fontSizeMUIIcons} />
