@@ -93,7 +93,7 @@ const ShipmentCard = ({ shipment, keycloak }) => {
 
   return (
     <div
-      className="bg-white shadow-md rounded p-6 mb-4 cursor-pointer mt-20"
+      className="bg-white shadow-md rounded p-6 cursor-pointer"
       onClick={toggleDetails}
     >
       <div className="flex justify-between items-start">
