@@ -6,7 +6,7 @@ const AdminShipmentCard = ({ shipment, keycloak, onStatusUpdate }) => {
   const [shipmentHistory, setShipmentHistory] = useState(
     shipment.shipmentHistory
   );
-  const { receiverName, weightOption, boxColor, destinationCountry, price } =
+  const { receiverName, weightOption, boxColour, destinationCountry, price } =
     shipment;
 
   const latestStatus = shipmentHistory.sort(
@@ -127,7 +127,7 @@ const AdminShipmentCard = ({ shipment, keycloak, onStatusUpdate }) => {
           </div>
           <div className="text-sm mb-2">Receiver Name: {receiverName}</div>
           <div className="text-sm mb-2">Weight Option: {weightOption}</div>
-          <div className="text-sm mb-2">Box Color: {boxColor}</div>
+          <div className="text-sm mb-2">Box Color: {boxColour}</div>
           <div className="text-sm mb-2">
             Destination Country: {destinationCountry}
           </div>
