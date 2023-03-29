@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ShipmentCard from "../components/ShipmentComponents/ShipmentCard";
 import axios from "axios";
+import CancelIcon from "@mui/icons-material/Cancel";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const ShipmentPage = ({ keycloak }) => {
   const [shipments, setShipments] = useState([]);
+  const fontSizeMUIIcons = "10px";
 
   const filterShipments = (status) => {
     return shipments
@@ -16,11 +20,11 @@ const ShipmentPage = ({ keycloak }) => {
         const bStatus = b.shipmentHistory[0].shipmentStatus;
         const aDate = new Date(a.shipmentHistory[0].createdAt);
         const bDate = new Date(b.shipmentHistory[0].createdAt);
-  
+
         if (aStatus === bStatus) {
           return bDate - aDate;
         }
-  
+
         return aStatus.localeCompare(bStatus);
       });
   };
@@ -44,7 +48,7 @@ const ShipmentPage = ({ keycloak }) => {
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         ),
       }));
-  
+
       setShipments(sortedShipments);
       console.log("Fetched shipments:", sortedShipments);
     } catch (error) {
@@ -60,36 +64,52 @@ const ShipmentPage = ({ keycloak }) => {
 
   return (
     <div className="relative">
-    <div className="mt-6">
-    <div className="bg-white rounded p-4 mb-8">
-        <h1 className="text-2xl font-bold mb-2">Your Shipments</h1>
-        <p className="text-black-600">
-          Here you can view all your shipments. Clicking a shipment shows you the status updates.
-        </p>
-      </div>
-      <div className="flex justify-around">
-        <div className="w-1/3">
-          <h2 className="text-2xl font-semibold mb-4 text-white bg-green-600 px-4 py-2 rounded-md">Active Shipments</h2>
-          {filterShipments(["CREATED", "RECEIVED", "INTRANSIT"]).map(
-            (shipment) => (
+      <div className="mt-6">
+        <div className="bg-white rounded p-4 mb-8">
+          <h1 className="text-2xl font-bold mb-2">Your Shipments</h1>
+          <p className="text-black-600">
+            Here you can view all your shipments. Clicking a shipment shows you
+            the status updates.
+          </p>
+        </div>
+        <div className="flex justify-around">
+          <div className="w-1/3">
+            <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-l-md">
+              <span className="text-green-700">
+                <LocalShippingIcon fontSize={fontSizeMUIIcons} />
+              </span>
+              Active Shipments
+            </h2>
+            {filterShipments(["CREATED", "RECEIVED", "INTRANSIT"]).map(
+              (shipment) => (
+                <ShipmentCard key={shipment.id} shipment={shipment} />
+              )
+            )}
+          </div>
+          <div className="w-1/3">
+            <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-none">
+              <span className="text-yellow-400">
+                <CheckCircleIcon fontSize={fontSizeMUIIcons} />
+              </span>
+              Completed Shipments
+            </h2>
+            {filterShipments(["COMPLETED"]).map((shipment) => (
               <ShipmentCard key={shipment.id} shipment={shipment} />
-            )
-          )}
-        </div>
-        <div className="w-1/3">
-          <h2 className="text-2xl font-semibold mb-4 text-white bg-yellow-400 px-4 py-2 rounded-md">Completed Shipments</h2>
-          {filterShipments(["COMPLETED"]).map((shipment) => (
-            <ShipmentCard key={shipment.id} shipment={shipment} />
-          ))}
-        </div>
-        <div className="w-1/3">
-          <h2 className="text-2xl font-semibold mb-4 text-white bg-red-600 px-4 py-2 rounded-md">Cancelled Shipments</h2>
-          {filterShipments(["CANCELLED"]).map((shipment) => (
-            <ShipmentCard key={shipment.id} shipment={shipment} />
-          ))}
+            ))}
+          </div>
+          <div className="w-1/3">
+            <h2 className="text-[20px] font-semibold mb-4 bg-white px-4 py-2 rounded-r-md">
+              <span className="text-red-700">
+                <CancelIcon fontSize={fontSizeMUIIcons} />
+              </span>
+              Cancelled Shipments
+            </h2>
+            {filterShipments(["CANCELLED"]).map((shipment) => (
+              <ShipmentCard key={shipment.id} shipment={shipment} />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
       {keycloak.authenticated && (
         <button
           onClick={handleCreateShipmentClick}
