@@ -64,7 +64,7 @@ const ShipmentPage = ({ keycloak }) => {
 
   return (
     <div className="w-full md:w-auto">
-      <div className="mt-6">
+      <div className="mt-5 md:mt-32">
         <div className="bg-white rounded p-4 mb-8">
           <h1 className="text-2xl font-bold mb-2">Your Shipments</h1>
           <p className="text-black-600">
