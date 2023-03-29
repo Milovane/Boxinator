@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-
 const ShipmentCard = ({ shipment, keycloak }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const [shipmentHistory, setShipmentHistory] = useState(shipment.shipmentHistory);
+  const [shipmentHistory, setShipmentHistory] = useState(
+    shipment.shipmentHistory
+  );
 
-  const {
-    receiverName,
-    weightOption,
-    boxColor,
-    destinationCountry,
-    price,
-    
-  } = shipment;
+  const { receiverName, weightOption, boxColour, destinationCountry, price } =
+    shipment;
 
   const latestStatus = shipmentHistory.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -47,7 +42,7 @@ const ShipmentCard = ({ shipment, keycloak }) => {
     const map = [];
     const cancelled = latestStatus.shipmentStatus === "CANCELLED";
     const completed = latestStatus.shipmentStatus === "COMPLETED";
-    console.log(latestStatus)
+    console.log(latestStatus);
     for (let i = 0; i < 4; i++) {
       map.push(
         <span
@@ -68,7 +63,11 @@ const ShipmentCard = ({ shipment, keycloak }) => {
           <span
             key={`line-${i}`}
             className={`${
-              cancelled ? "bg-red-500" : completed ? "bg-yellow-300" : "bg-gray-300"
+              cancelled
+                ? "bg-red-500"
+                : completed
+                ? "bg-yellow-300"
+                : "bg-gray-300"
             } mx-1 w-4 h-1 block`}
           ></span>
         );
@@ -81,10 +80,11 @@ const ShipmentCard = ({ shipment, keycloak }) => {
     setShowDetails(!showDetails);
   };
 
-  
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.toLocaleTimeString()}`;
+    return `${
+      date.getMonth() + 1
+    }/${date.getDate()}/${date.getFullYear()} ${date.toLocaleTimeString()}`;
   };
 
   useEffect(() => {
@@ -100,12 +100,16 @@ const ShipmentCard = ({ shipment, keycloak }) => {
         <div>
           <div className="text-lg font-bold mb-2">{receiverName}</div>
           <div className="text-sm mb-2">Weight Option: {weightOption}</div>
-          <div className="text-sm mb-2">Box Color: {boxColor}</div>
-          <div className="text-sm mb-2">Destination Country: {destinationCountry}</div>
+          <div className="text-sm mb-2">Box Color: {boxColour}</div>
+          <div className="text-sm mb-2">
+            Destination Country: {destinationCountry}
+          </div>
           <div className="text-sm mb-4">Price: ${price}</div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="text-base font-semibold mb-2">Status: {latestStatus.shipmentStatus}</div>
+          <div className="text-base font-semibold mb-2">
+            Status: {latestStatus.shipmentStatus}
+          </div>
           <div className="flex">{renderStatusMap()}</div>
         </div>
       </div>
@@ -117,7 +121,8 @@ const ShipmentCard = ({ shipment, keycloak }) => {
               .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
               .map((historyItem) => (
                 <li key={historyItem.Id}>
-                  {historyItem.shipmentStatus} - {formatDate(historyItem.createdAt)}
+                  {historyItem.shipmentStatus} -{" "}
+                  {formatDate(historyItem.createdAt)}
                 </li>
               ))}
           </ul>
