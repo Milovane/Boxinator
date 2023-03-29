@@ -38,7 +38,7 @@ function App() {
         <BrowserRouter>
           <Context.Provider value={{ context, updateContext }}>
             <Navbar />
-            <main className="container md:mx-auto mt-24 mb-24">
+            <main className="container sm:mx-auto md:mx-auto mt-24 mb-24">
               <Routes>
                 <Route path="/" element={<HomePage />}></Route>
                 {/* <Route path="/login" element={<LoginFormPage />}></Route> */}
