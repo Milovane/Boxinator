@@ -4,8 +4,10 @@ import axios from "axios";
 import CancelIcon from "@mui/icons-material/Cancel";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useNavigate } from "react-router-dom";
 
 const ShipmentPage = ({ keycloak }) => {
+  const navigate = useNavigate();
   const [shipments, setShipments] = useState([]);
   const fontSizeMUIIcons = "10px";
 
@@ -29,7 +31,7 @@ const ShipmentPage = ({ keycloak }) => {
       });
   };
   const handleCreateShipmentClick = () => {
-    window.location.href = "/create-shipment";
+    navigate("/create-shipment");
   };
 
   const fetchShipments = async () => {
