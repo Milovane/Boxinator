@@ -46,9 +46,7 @@ function NewNavBar() {
 
           <Box
             sx={{
-              flexGrow: 1,
-              display: { xs: "flex-end", md: "none" },
-              color: "red",
+              display: { xs: "flex", md: "none" },
               right: "0",
             }}
           >
@@ -88,7 +86,7 @@ function NewNavBar() {
             </Menu>
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
