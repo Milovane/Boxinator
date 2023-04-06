@@ -19,6 +19,7 @@ import CreateCountryForm from "./components/CountryComponents/CreateCountryForm"
 import AdminPage from "./pages/AdminPage";
 import ManageShipmentsPage from "./pages/ManageShipmentsPage";
 import ProfilePage from "./pages/ProfilePage";
+import NewNavBar from "./components/NewNavBar";
 
 function App() {
   const [context, setContext] = useState({});
@@ -37,7 +38,8 @@ function App() {
       >
         <BrowserRouter>
           <Context.Provider value={{ context, updateContext }}>
-            <Navbar />
+            <NewNavBar />
+            {/* <Navbar /> */}
             <main className="container mx-auto mt-24 mb-24">
               <Routes>
                 <Route path="/" element={<HomePage />}></Route>

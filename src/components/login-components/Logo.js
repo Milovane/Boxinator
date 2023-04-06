@@ -4,7 +4,7 @@ export const Logo = ({ w, h, textColor }) => {
   return (
     <a
       href="/"
-      className={`flex items-center mb-2 text-2xl font-semibold ${textColor} dark:text-white`}
+      className={`flex items-center text-2xl font-semibold ${textColor} dark:text-white`}
     >
       <img
         className={`${w} ${h} mr-3`}
