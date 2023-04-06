@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Logo } from "./login-components/Logo";
+import Divider from "@mui/material/Divider";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -83,6 +84,15 @@ function NewNavBar() {
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
+              <Divider />
+              {/* Check authentication here and add log out or login function */}
+              <MenuItem
+                key="abc"
+                onClick={handleCloseNavMenu}
+                sx={{ color: "white", background: "blue", mx: 2 }}
+              >
+                <Typography textAlign="center">Login</Typography>
+              </MenuItem>
             </Menu>
           </Box>
 
