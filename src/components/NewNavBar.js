@@ -136,18 +136,6 @@ function NewNavBar() {
             >
               Contained
             </Button>
-            {/* <Button
-              key={"abc"}
-              onClick={handleCloseNavMenu}
-              sx={{
-                my: 2,
-                color: "white",
-                background: "blue",
-                display: "block",
-              }}
-            >
-              Login
-            </Button> */}
           </Box>
         </Toolbar>
       </Container>
