@@ -19,7 +19,6 @@ import { ROLES } from "../const/roles";
 import SnackBarComponent from "./UserFeedback/SnackBarComponent";
 import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
 
-const pages = ["Products", "Pricing", "Blog"];
 const pagesAndLinks = [
   { Name: "Home", Link: "/", Authenticated: false, Admin: false },
   {
@@ -191,13 +190,6 @@ function Navbar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {/* <MenuItem onClick={handleCloseNavMenu}>
-                <NavLink to="/">Home</NavLink>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
-                <NavLink to="/shipment">Shipment</NavLink>
-              </MenuItem> */}
-
               {pagesAndLinks.map(
                 (page) =>
                   !page.Authenticated && (
@@ -209,7 +201,6 @@ function Navbar() {
                       primaryText={page.Name}
                     >
                       {page.Name}
-                      {/* <Typography textAlign="center">{page.Name}</Typography> */}
                     </MenuItem>
                   )
               )}
@@ -227,7 +218,6 @@ function Navbar() {
                         primaryText={page.Name}
                       >
                         {page.Name}
-                        {/* <Typography textAlign="center">{page.Name}</Typography> */}
                       </MenuItem>
                     )
                 )}
@@ -246,14 +236,11 @@ function Navbar() {
                         primaryText={page.Name}
                       >
                         {page.Name}
-                        {/* <Typography textAlign="center">{page.Name}</Typography> */}
                       </MenuItem>
                     )
                 )}
 
               <Divider />
-              {/* Check authentication here and add log out or login function */}
-
               {!keycloak.authenticated && (
                 <Button
                   variant="contained"
