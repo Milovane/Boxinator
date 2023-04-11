@@ -199,18 +199,57 @@ function NewNavBar() {
                 <NavLink to="/shipment">Shipment</NavLink>
               </MenuItem> */}
 
-              {pagesAndLinks.map((page) => (
-                <MenuItem
-                  key={page.Name}
-                  onClick={handleCloseNavMenu}
-                  component={NavLink}
-                  to={page.Link}
-                  primaryText={page.Name}
-                >
-                  {page.Name}
-                  {/* <Typography textAlign="center">{page.Name}</Typography> */}
-                </MenuItem>
-              ))}
+              {pagesAndLinks.map(
+                (page) =>
+                  !page.Authenticated && (
+                    <MenuItem
+                      key={page.Name}
+                      onClick={handleCloseNavMenu}
+                      component={NavLink}
+                      to={page.Link}
+                      primaryText={page.Name}
+                    >
+                      {page.Name}
+                      {/* <Typography textAlign="center">{page.Name}</Typography> */}
+                    </MenuItem>
+                  )
+              )}
+
+              {keycloak.authenticated &&
+                pagesAndLinks.map(
+                  (page) =>
+                    !page.Admin &&
+                    page.Authenticated && (
+                      <MenuItem
+                        key={page.Name}
+                        onClick={handleCloseNavMenu}
+                        component={NavLink}
+                        to={page.Link}
+                        primaryText={page.Name}
+                      >
+                        {page.Name}
+                        {/* <Typography textAlign="center">{page.Name}</Typography> */}
+                      </MenuItem>
+                    )
+                )}
+
+              {keycloak.authenticated &&
+                pagesAndLinks.map(
+                  (page) =>
+                    page.Admin &&
+                    page.Authenticated && (
+                      <MenuItem
+                        key={page.Name}
+                        onClick={handleCloseNavMenu}
+                        component={NavLink}
+                        to={page.Link}
+                        primaryText={page.Name}
+                      >
+                        {page.Name}
+                        {/* <Typography textAlign="center">{page.Name}</Typography> */}
+                      </MenuItem>
+                    )
+                )}
 
               <Divider />
               {/* Check authentication here and add log out or login function */}
