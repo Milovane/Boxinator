@@ -11,13 +11,94 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { Logo } from "./login-components/Logo";
 import Divider from "@mui/material/Divider";
+import { NavLink } from "react-router-dom";
+import { useKeycloak } from "@react-keycloak/web";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../context";
+import { ROLES } from "../const/roles";
+import SnackBarComponent from "./UserFeedback/SnackBarComponent";
+import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
 
 const pages = ["Products", "Pricing", "Blog"];
+const pagesAndLinks = [
+  { Name: "Home", Link: "/", Authenticated: false, Admin: false },
+  {
+    Name: "Shipment",
+    Link: "/shipment",
+    Authenticated: true,
+    Admin: false,
+  },
+];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NewNavBar() {
+  const [state, setState] = React.useState({
+    open: false,
+    snackbarMessage: "Empty",
+    severity: "success",
+  });
+  const { keycloak, initialized } = useKeycloak();
+  const navigate = useNavigate();
+  const { context, updateContext } = useContext(Context);
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  async function checkAuthentication() {
+    if (keycloak.authenticated) {
+      fetchUserWithId();
+    }
+  }
+
+  async function fetchUserWithId() {
+    const userId = keycloak.subject;
+
+    try {
+      const apiResponse = await fetch(
+        `http://localhost:8080/api/v1/users/${userId}`,
+        {
+          credentials: "include",
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            Authorization: "Bearer " + keycloak.token,
+            "User-Agent": "any-name",
+          },
+        }
+      );
+
+      console.log(apiResponse);
+
+      if (apiResponse.ok) {
+        //User exists
+        var user = await apiResponse.json();
+        console.log(user + " hihihi");
+
+        updateContext(user);
+        //Todo: remove
+        //alert("user exists, navigate to shipment page");
+        //navigate("/shipment");
+      } else {
+        //User does not exist
+        //alert("You do not have an account, redirecting to register page");
+        openSnackBar(
+          "You do not have an account, redirecting to register page",
+          SnackbarMessageSeverity.Error
+        );
+        navigate("/register");
+        //for testing purposes, basic guest user
+        //postGuestUser();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function logoutFromKeyCloak() {
+    navigate("/");
+    keycloak.logout();
+  }
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -32,6 +113,25 @@ function NewNavBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  function openSnackBar(message, messageSeverity) {
+    const newState = {
+      open: true,
+      snackbarMessage: message,
+      severity: messageSeverity,
+    };
+
+    setState({ ...newState });
+  }
+
+  const closeSnackbar = () => {
+    const newState = {
+      open: false,
+      snackbarMessage: "",
+      severity: "success",
+    };
+    setState({ ...newState });
   };
 
   return (
@@ -77,11 +177,26 @@ function NewNavBar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+              {/* <MenuItem onClick={handleCloseNavMenu}>
+                <NavLink to="/">Home</NavLink>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <NavLink to="/shipment">Shipment</NavLink>
+              </MenuItem> */}
+
+              {pagesAndLinks.map((page) => (
+                <MenuItem
+                  key={page.Name}
+                  onClick={handleCloseNavMenu}
+                  component={NavLink}
+                  to={page.Link}
+                  primaryText={page.Name}
+                >
+                  {page.Name}
+                  {/* <Typography textAlign="center">{page.Name}</Typography> */}
                 </MenuItem>
               ))}
+
               <Divider />
               {/* Check authentication here and add log out or login function */}
               <Button
@@ -95,31 +210,22 @@ function NewNavBar() {
                   mx: "6px",
                 }}
               >
-                Contained
-              </Button>
-              {/* <Button
-                key={"abc"}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  color: "white",
-                  background: "blue",
-                  display: "block",
-                  mx: "auto",
-                }}
-              >
                 Login
-              </Button> */}
+              </Button>
             </Menu>
           </Box>
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {pagesAndLinks.map((page) => (
               <Button
-                key={page}
+                component={NavLink}
+                to={page.Link}
+                key={page.Name}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "#333", display: "block" }}
+                sx={{ my: "auto", color: "#333", display: "block" }}
               >
-                {page}
+                {page.Name}
+                {/* <NavLink to={page.Link}>{page.Name}</NavLink> */}
               </Button>
             ))}
 
@@ -134,11 +240,15 @@ function NewNavBar() {
                 my: "20px",
               }}
             >
-              Contained
+              Login
             </Button>
           </Box>
         </Toolbar>
       </Container>
+      <SnackBarComponent
+        snackbarDetails={state}
+        closeSnack={() => closeSnackbar}
+      />
     </AppBar>
   );
 }
