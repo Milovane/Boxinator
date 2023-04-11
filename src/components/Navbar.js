@@ -1,16 +1,53 @@
-import React from "react";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
 import { Logo } from "./login-components/Logo";
-import NavbarLink from "./navbar-components/Link";
+import Divider from "@mui/material/Divider";
+import { NavLink } from "react-router-dom";
 import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../context";
-import Button from "@mui/material/Button";
 import { ROLES } from "../const/roles";
 import SnackBarComponent from "./UserFeedback/SnackBarComponent";
 import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
 
-export const Navbar = () => {
+const pagesAndLinks = [
+  { Name: "Home", Link: "/", Authenticated: false, Admin: false },
+  {
+    Name: "Create shipment",
+    Link: "/create-shipment",
+    Authenticated: false,
+    Admin: false,
+  },
+  {
+    Name: "Shipment",
+    Link: "/shipment",
+    Authenticated: true,
+    Admin: false,
+  },
+  {
+    Name: "Profile",
+    Link: "/profile",
+    Authenticated: true,
+    Admin: false,
+  },
+  {
+    Name: "Admin",
+    Link: "/admin",
+    Authenticated: true,
+    Admin: true,
+  },
+];
+
+function Navbar() {
   const [state, setState] = React.useState({
     open: false,
     snackbarMessage: "Empty",
@@ -19,60 +56,13 @@ export const Navbar = () => {
   const { keycloak, initialized } = useKeycloak();
   const navigate = useNavigate();
   const { context, updateContext } = useContext(Context);
-  console.log("Context: " + JSON.stringify(context));
+
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
   async function checkAuthentication() {
     if (keycloak.authenticated) {
       fetchUserWithId();
-    }
-  }
-
-  async function fetchUsers() {
-    try {
-      const apiResponse = await fetch("http://localhost:8080/api/v1/users", {
-        credentials: "include",
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-          Authorization: "Bearer " + keycloak.token,
-          "User-Agent": "any-name",
-        },
-      });
-
-      var users = await apiResponse.json();
-
-      console.log(users);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function postGuestUser() {
-    try {
-      const apiResponse = await fetch(
-        "http://localhost:8080/api/v1/users/registerGuest",
-        {
-          credentials: "include",
-          method: "POST",
-          body: JSON.stringify({
-            jwt: keycloak.token,
-          }),
-          headers: {
-            "content-type": "application/json",
-            Authorization: "Bearer " + keycloak.token,
-            "User-Agent": "any-name",
-          },
-        }
-      );
-
-      //"Access-Control-Allow-Origin": "*",
-      console.log("User token: ");
-      console.log(keycloak.token);
-      var response = await apiResponse.json();
-      alert("User posted!");
-
-      console.log(response);
-    } catch (error) {
-      console.log(error);
     }
   }
 
@@ -98,22 +88,14 @@ export const Navbar = () => {
       if (apiResponse.ok) {
         //User exists
         var user = await apiResponse.json();
-        console.log(user + " hihihi");
 
         updateContext(user);
-        //Todo: remove
-        //alert("user exists, navigate to shipment page");
-        //navigate("/shipment");
       } else {
-        //User does not exist
-        //alert("You do not have an account, redirecting to register page");
         openSnackBar(
           "You do not have an account, redirecting to register page",
           SnackbarMessageSeverity.Error
         );
         navigate("/register");
-        //for testing purposes, basic guest user
-        //postGuestUser();
       }
     } catch (error) {
       console.log(error);
@@ -121,9 +103,25 @@ export const Navbar = () => {
   }
 
   function logoutFromKeyCloak() {
+    handleCloseNavMenu();
     navigate("/");
     keycloak.logout();
   }
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   function openSnackBar(message, messageSeverity) {
     const newState = {
@@ -144,76 +142,238 @@ export const Navbar = () => {
     setState({ ...newState });
   };
 
+  function loginToKeycloak() {
+    handleCloseNavMenu();
+    keycloak.login();
+  }
+
   return (
-    <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
-      <div className="container flex flex-wrap items-center justify-between mx-auto">
-        <Logo w="w-8" h="h-8" textColor={"text-dark"} />
-        <div
-          className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
-          id="navbar-sticky"
-        >
-          <ul className="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <NavbarLink link="/" name="Home" />
-            {keycloak.authenticated && (
-              <>
-                <NavbarLink link="/shipment" name="Shipment" />
-                {/* <Link link="/user" name="Profile"></Link> */}
-                <NavbarLink link="/profile" name="Profile"></NavbarLink>
-              </>
-            )}
-            {!keycloak.authenticated && (
-              <>
-                <NavbarLink link="/create-shipment" name="Create shipment" />
-              </>
-            )}
+    <AppBar position="sticky" style={{ background: "#fff", color: "#333" }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Box sx={{ flexGrow: 1, display: "flex" }}>
+            <Logo w="w-8" h="h-8" textColor={"text-dark"} />
+          </Box>
 
-            {keycloak.authenticated && keycloak.hasRealmRole(ROLES.Admin) && (
-              <>
-                <NavbarLink link="/admin" name="Admin" />
-              </>
-            )}
+          <Box
+            sx={{
+              display: { xs: "flex", md: "none" },
+              right: "0",
+            }}
+          >
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              keepMounted
+              disableScrollLock={true}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              {pagesAndLinks.map(
+                (page) =>
+                  !page.Authenticated && (
+                    <MenuItem
+                      key={page.Name}
+                      onClick={handleCloseNavMenu}
+                      component={NavLink}
+                      to={page.Link}
+                      primaryText={page.Name}
+                    >
+                      {page.Name}
+                    </MenuItem>
+                  )
+              )}
 
-            <section className="actions">
+              {keycloak.authenticated &&
+                pagesAndLinks.map(
+                  (page) =>
+                    !page.Admin &&
+                    page.Authenticated && (
+                      <MenuItem
+                        key={page.Name}
+                        onClick={handleCloseNavMenu}
+                        component={NavLink}
+                        to={page.Link}
+                        primaryText={page.Name}
+                      >
+                        {page.Name}
+                      </MenuItem>
+                    )
+                )}
+
+              {keycloak.authenticated &&
+                keycloak.hasRealmRole(ROLES.Admin) &&
+                pagesAndLinks.map(
+                  (page) =>
+                    page.Admin &&
+                    page.Authenticated && (
+                      <MenuItem
+                        key={page.Name}
+                        onClick={handleCloseNavMenu}
+                        component={NavLink}
+                        to={page.Link}
+                        primaryText={page.Name}
+                      >
+                        {page.Name}
+                      </MenuItem>
+                    )
+                )}
+
+              <Divider />
               {!keycloak.authenticated && (
-                <Button onClick={() => keycloak.login()} variant="contained">
+                <Button
+                  variant="contained"
+                  key={"abc"}
+                  onClick={() => loginToKeycloak()}
+                  sx={{
+                    color: "white",
+                    background: "blue",
+                    display: "block",
+                    mx: "6px",
+                  }}
+                >
                   Login
                 </Button>
               )}
               {keycloak.authenticated && (
-                <>
-                  <Button
-                    onClick={() => logoutFromKeyCloak()}
-                    variant="contained"
-                  >
-                    Logout
-                  </Button>
-                </>
+                <Button
+                  variant="contained"
+                  key={"abc"}
+                  onClick={() => logoutFromKeyCloak()}
+                  sx={{
+                    color: "white",
+                    background: "blue",
+                    display: "block",
+                    mx: "6px",
+                  }}
+                >
+                  Logout
+                </Button>
               )}
-              {
-                (keycloak.onAuthSuccess = () => {
-                  checkAuthentication();
-                })
-              }
-              {
-                (keycloak.onAuthLogout = () => {
-                  console.log("Logout user");
-                  navigate("/");
-                })
-              }
-            </section>
-          </ul>
-          {/* For testing, show keycloak token: {keycloak.token && (
-            <div>
-              <h4>Token</h4>
-              <pre>{keycloak.token}</pre>
-            </div>
-          )} */}
-        </div>
-      </div>
+            </Menu>
+          </Box>
+
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            {pagesAndLinks.map(
+              (page) =>
+                !page.Authenticated && (
+                  <Button
+                    component={NavLink}
+                    to={page.Link}
+                    key={page.Name}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: "auto", color: "#333", display: "block" }}
+                  >
+                    {page.Name}
+                  </Button>
+                )
+            )}
+
+            {keycloak.authenticated &&
+              pagesAndLinks.map(
+                (page) =>
+                  !page.Admin &&
+                  page.Authenticated && (
+                    <Button
+                      component={NavLink}
+                      to={page.Link}
+                      key={page.Name}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: "auto", color: "#333", display: "block" }}
+                    >
+                      {page.Name}
+                    </Button>
+                  )
+              )}
+
+            {keycloak.authenticated &&
+              keycloak.hasRealmRole(ROLES.Admin) &&
+              pagesAndLinks.map(
+                (page) =>
+                  page.Admin &&
+                  page.Authenticated && (
+                    <Button
+                      component={NavLink}
+                      to={page.Link}
+                      key={page.Name}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: "auto", color: "#333", display: "block" }}
+                    >
+                      {page.Name}
+                    </Button>
+                  )
+              )}
+
+            {keycloak.authenticated && (
+              <Button
+                variant="contained"
+                key={"abc"}
+                onClick={() => logoutFromKeyCloak()}
+                sx={{
+                  color: "white",
+                  background: "blue",
+                  mx: "6px",
+                  my: "20px",
+                }}
+              >
+                Logout
+              </Button>
+            )}
+            {!keycloak.authenticated && (
+              <Button
+                variant="contained"
+                key={"abc"}
+                onClick={() => loginToKeycloak()}
+                sx={{
+                  color: "white",
+                  background: "blue",
+                  mx: "6px",
+                  my: "20px",
+                }}
+              >
+                Login
+              </Button>
+            )}
+            {
+              (keycloak.onAuthSuccess = () => {
+                checkAuthentication();
+              })
+            }
+            {
+              (keycloak.onAuthLogout = () => {
+                console.log("Logout user");
+                navigate("/");
+              })
+            }
+          </Box>
+        </Toolbar>
+      </Container>
       <SnackBarComponent
         snackbarDetails={state}
         closeSnack={() => closeSnackbar}
       />
-    </nav>
+    </AppBar>
   );
-};
+}
+export default Navbar;

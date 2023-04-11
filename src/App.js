@@ -1,6 +1,5 @@
 import "./App.css";
 import HomePage from "./pages/HomePage";
-import { Navbar } from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HistoryPage } from "./pages/HistoryPage";
 import React from "react";
@@ -12,13 +11,13 @@ import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./keycloak";
 import UserPage from "./pages/UserPage"; // Import UserPage component
 import { Context } from "./context";
-import { useContext } from "react";
 import { useState } from "react";
 import ShipmentPage from "./pages/ShipmentPage";
 import CreateCountryForm from "./components/CountryComponents/CreateCountryForm";
 import AdminPage from "./pages/AdminPage";
 import ManageShipmentsPage from "./pages/ManageShipmentsPage";
 import ProfilePage from "./pages/ProfilePage";
+import Navbar from "./components/NavBar";
 
 function App() {
   const [context, setContext] = useState({});
@@ -38,7 +37,8 @@ function App() {
         <BrowserRouter>
           <Context.Provider value={{ context, updateContext }}>
             <Navbar />
-            <main className="container mx-auto mt-24 mb-24">
+            {/* <Navbar /> */}
+            <main className="container mx-auto mt-4 mb-24">
               <Routes>
                 <Route path="/" element={<HomePage />}></Route>
                 {/* <Route path="/login" element={<LoginFormPage />}></Route> */}
