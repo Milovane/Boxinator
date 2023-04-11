@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Logo } from "./login-components/Logo";
 import Divider from "@mui/material/Divider";
+import { red } from "@mui/material/colors";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -38,7 +39,7 @@ function NewNavBar() {
   };
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" style={{ background: "#fff", color: "#333" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: "flex" }}>
@@ -69,6 +70,7 @@ function NewNavBar() {
                 horizontal: "right",
               }}
               keepMounted
+              disableScrollLock={true}
               transformOrigin={{
                 vertical: "top",
                 horizontal: "right",
@@ -86,13 +88,25 @@ function NewNavBar() {
               ))}
               <Divider />
               {/* Check authentication here and add log out or login function */}
-              <MenuItem
+              {/* <MenuItem
                 key="abc"
                 onClick={handleCloseNavMenu}
                 sx={{ color: "white", background: "blue", mx: 2 }}
               >
                 <Typography textAlign="center">Login</Typography>
-              </MenuItem>
+              </MenuItem> */}
+              <Button
+                key={"abc"}
+                onClick={handleCloseNavMenu}
+                sx={{
+                  color: "white",
+                  background: "blue",
+                  display: "block",
+                  mx: "auto",
+                }}
+              >
+                Login
+              </Button>
             </Menu>
           </Box>
 
@@ -101,11 +115,23 @@ function NewNavBar() {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "#333", display: "block" }}
               >
                 {page}
               </Button>
             ))}
+            <Button
+              key={"abc"}
+              onClick={handleCloseNavMenu}
+              sx={{
+                my: 2,
+                color: "white",
+                background: "blue",
+                display: "block",
+              }}
+            >
+              Login
+            </Button>
           </Box>
         </Toolbar>
       </Container>
