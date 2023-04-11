@@ -24,13 +24,30 @@ const pages = ["Products", "Pricing", "Blog"];
 const pagesAndLinks = [
   { Name: "Home", Link: "/", Authenticated: false, Admin: false },
   {
+    Name: "Create shipment",
+    Link: "/create-shipment",
+    Authenticated: false,
+    Admin: false,
+  },
+  {
     Name: "Shipment",
     Link: "/shipment",
     Authenticated: true,
     Admin: false,
   },
+  {
+    Name: "Profile",
+    Link: "/profile",
+    Authenticated: true,
+    Admin: false,
+  },
+  {
+    Name: "Admin",
+    Link: "/admin",
+    Authenticated: true,
+    Admin: true,
+  },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NewNavBar() {
   const [state, setState] = React.useState({
@@ -73,22 +90,14 @@ function NewNavBar() {
       if (apiResponse.ok) {
         //User exists
         var user = await apiResponse.json();
-        console.log(user + " hihihi");
 
         updateContext(user);
-        //Todo: remove
-        //alert("user exists, navigate to shipment page");
-        //navigate("/shipment");
       } else {
-        //User does not exist
-        //alert("You do not have an account, redirecting to register page");
         openSnackBar(
           "You do not have an account, redirecting to register page",
           SnackbarMessageSeverity.Error
         );
         navigate("/register");
-        //for testing purposes, basic guest user
-        //postGuestUser();
       }
     } catch (error) {
       console.log(error);
@@ -96,6 +105,7 @@ function NewNavBar() {
   }
 
   function logoutFromKeyCloak() {
+    handleCloseNavMenu();
     navigate("/");
     keycloak.logout();
   }
@@ -133,6 +143,11 @@ function NewNavBar() {
     };
     setState({ ...newState });
   };
+
+  function loginToKeycloak() {
+    handleCloseNavMenu();
+    keycloak.login();
+  }
 
   return (
     <AppBar position="sticky" style={{ background: "#fff", color: "#333" }}>
@@ -199,49 +214,131 @@ function NewNavBar() {
 
               <Divider />
               {/* Check authentication here and add log out or login function */}
-              <Button
-                variant="contained"
-                key={"abc"}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  color: "white",
-                  background: "blue",
-                  display: "block",
-                  mx: "6px",
-                }}
-              >
-                Login
-              </Button>
+
+              {!keycloak.authenticated && (
+                <Button
+                  variant="contained"
+                  key={"abc"}
+                  onClick={() => loginToKeycloak()}
+                  sx={{
+                    color: "white",
+                    background: "blue",
+                    display: "block",
+                    mx: "6px",
+                  }}
+                >
+                  Login
+                </Button>
+              )}
+              {keycloak.authenticated && (
+                <Button
+                  variant="contained"
+                  key={"abc"}
+                  onClick={() => logoutFromKeyCloak()}
+                  sx={{
+                    color: "white",
+                    background: "blue",
+                    display: "block",
+                    mx: "6px",
+                  }}
+                >
+                  Logout
+                </Button>
+              )}
             </Menu>
           </Box>
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {pagesAndLinks.map((page) => (
-              <Button
-                component={NavLink}
-                to={page.Link}
-                key={page.Name}
-                onClick={handleCloseNavMenu}
-                sx={{ my: "auto", color: "#333", display: "block" }}
-              >
-                {page.Name}
-                {/* <NavLink to={page.Link}>{page.Name}</NavLink> */}
-              </Button>
-            ))}
+            {pagesAndLinks.map(
+              (page) =>
+                !page.Authenticated && (
+                  <Button
+                    component={NavLink}
+                    to={page.Link}
+                    key={page.Name}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: "auto", color: "#333", display: "block" }}
+                  >
+                    {page.Name}
+                  </Button>
+                )
+            )}
 
-            <Button
-              variant="contained"
-              key={"abc"}
-              onClick={handleCloseNavMenu}
-              sx={{
-                color: "white",
-                background: "blue",
-                mx: "6px",
-                my: "20px",
-              }}
-            >
-              Login
-            </Button>
+            {keycloak.authenticated &&
+              pagesAndLinks.map(
+                (page) =>
+                  !page.Admin &&
+                  page.Authenticated && (
+                    <Button
+                      component={NavLink}
+                      to={page.Link}
+                      key={page.Name}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: "auto", color: "#333", display: "block" }}
+                    >
+                      {page.Name}
+                    </Button>
+                  )
+              )}
+
+            {keycloak.authenticated &&
+              pagesAndLinks.map(
+                (page) =>
+                  page.Admin &&
+                  page.Authenticated && (
+                    <Button
+                      component={NavLink}
+                      to={page.Link}
+                      key={page.Name}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: "auto", color: "#333", display: "block" }}
+                    >
+                      {page.Name}
+                    </Button>
+                  )
+              )}
+
+            {keycloak.authenticated && (
+              <Button
+                variant="contained"
+                key={"abc"}
+                onClick={() => logoutFromKeyCloak()}
+                sx={{
+                  color: "white",
+                  background: "blue",
+                  mx: "6px",
+                  my: "20px",
+                }}
+              >
+                Logout
+              </Button>
+            )}
+            {!keycloak.authenticated && (
+              <Button
+                variant="contained"
+                key={"abc"}
+                onClick={() => loginToKeycloak()}
+                sx={{
+                  color: "white",
+                  background: "blue",
+                  mx: "6px",
+                  my: "20px",
+                }}
+              >
+                Login
+              </Button>
+            )}
+            {
+              (keycloak.onAuthSuccess = () => {
+                checkAuthentication();
+              })
+            }
+            {
+              (keycloak.onAuthLogout = () => {
+                console.log("Logout user");
+                navigate("/");
+              })
+            }
           </Box>
         </Toolbar>
       </Container>
