@@ -234,6 +234,7 @@ function NewNavBar() {
                 )}
 
               {keycloak.authenticated &&
+                keycloak.hasRealmRole(ROLES.Admin) &&
                 pagesAndLinks.map(
                   (page) =>
                     page.Admin &&
@@ -321,6 +322,7 @@ function NewNavBar() {
               )}
 
             {keycloak.authenticated &&
+              keycloak.hasRealmRole(ROLES.Admin) &&
               pagesAndLinks.map(
                 (page) =>
                   page.Admin &&
