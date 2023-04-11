@@ -40,7 +40,7 @@ function App() {
           <Context.Provider value={{ context, updateContext }}>
             <NewNavBar />
             {/* <Navbar /> */}
-            <main className="container mx-auto mt-24 mb-24">
+            <main className="container mx-auto mt-4 mb-24">
               <Routes>
                 <Route path="/" element={<HomePage />}></Route>
                 {/* <Route path="/login" element={<LoginFormPage />}></Route> */}
