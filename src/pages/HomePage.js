@@ -6,7 +6,7 @@ import containerImg2 from "../images/containers2.jpg";
 const HomePage = () => {
   return (
     <>
-      <div className="container md:mx-auto mt-[80px] mb-24 bg-white p-7 sm:p-20 rounded-lg">
+      <div className="container md:mx-auto mt-4 md:mt-12 mb-4 md:mb-12 bg-white p-7 sm:p-20 rounded-lg">
         <div className="mt-5">
           <h1 className="text-[40px]">Welcome to boxinator</h1>
           <br />
