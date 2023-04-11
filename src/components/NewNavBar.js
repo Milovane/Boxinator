@@ -84,14 +84,20 @@ function NewNavBar() {
               ))}
               <Divider />
               {/* Check authentication here and add log out or login function */}
-              {/* <MenuItem
-                key="abc"
-                onClick={handleCloseNavMenu}
-                sx={{ color: "white", background: "blue", mx: 2 }}
-              >
-                <Typography textAlign="center">Login</Typography>
-              </MenuItem> */}
               <Button
+                variant="contained"
+                key={"abc"}
+                onClick={handleCloseNavMenu}
+                sx={{
+                  color: "white",
+                  background: "blue",
+                  display: "block",
+                  mx: "6px",
+                }}
+              >
+                Contained
+              </Button>
+              {/* <Button
                 key={"abc"}
                 onClick={handleCloseNavMenu}
                 sx={{
@@ -102,7 +108,7 @@ function NewNavBar() {
                 }}
               >
                 Login
-              </Button>
+              </Button> */}
             </Menu>
           </Box>
 
@@ -116,7 +122,21 @@ function NewNavBar() {
                 {page}
               </Button>
             ))}
+
             <Button
+              variant="contained"
+              key={"abc"}
+              onClick={handleCloseNavMenu}
+              sx={{
+                color: "white",
+                background: "blue",
+                mx: "6px",
+                my: "20px",
+              }}
+            >
+              Contained
+            </Button>
+            {/* <Button
               key={"abc"}
               onClick={handleCloseNavMenu}
               sx={{
@@ -127,7 +147,7 @@ function NewNavBar() {
               }}
             >
               Login
-            </Button>
+            </Button> */}
           </Box>
         </Toolbar>
       </Container>
