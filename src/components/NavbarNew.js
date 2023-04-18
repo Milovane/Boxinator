@@ -11,49 +11,30 @@ import MenuItem from "@mui/material/MenuItem";
 import { Logo } from "./login-components/Logo";
 import Divider from "@mui/material/Divider";
 import { NavLink } from "react-router-dom";
-import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../context";
 import { ROLES } from "../const/roles";
 import SnackBarComponent from "./UserFeedback/SnackBarComponent";
 import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
+import { pagesAndLinks } from "../const/pagesAndLinks";
+import keycloak from "../keycloak";
 
-const pagesAndLinks = [
-  { Name: "Home", Link: "/", Authenticated: false, Admin: false },
-  {
-    Name: "Create shipment",
-    Link: "/create-shipment",
-    Authenticated: false,
-    Admin: false,
-  },
-  {
-    Name: "Shipment",
-    Link: "/shipment",
-    Authenticated: true,
-    Admin: false,
-  },
-  {
-    Name: "Profile",
-    Link: "/profile",
-    Authenticated: true,
-    Admin: false,
-  },
-  {
-    Name: "Admin",
-    Link: "/admin",
-    Authenticated: true,
-    Admin: true,
-  },
-];
-
-function Navbar() {
+function NavbarNew() {
   const [state, setState] = React.useState({
     open: false,
     snackbarMessage: "Empty",
     severity: "success",
   });
-  const { keycloak, initialized } = useKeycloak();
+
+  React.useEffect(() => {
+    console.log("keycloak uppdaterades?");
+    //navigate to register page if user null
+    if (context.firstName == null) {
+      navigate("/register");
+    }
+  }, [keycloak.token]);
+
   const navigate = useNavigate();
   const { context, updateContext } = useContext(Context);
 
@@ -198,7 +179,6 @@ function Navbar() {
                       onClick={handleCloseNavMenu}
                       component={NavLink}
                       to={page.Link}
-                      primaryText={page.Name}
                     >
                       {page.Name}
                     </MenuItem>
@@ -215,7 +195,6 @@ function Navbar() {
                         onClick={handleCloseNavMenu}
                         component={NavLink}
                         to={page.Link}
-                        primaryText={page.Name}
                       >
                         {page.Name}
                       </MenuItem>
@@ -233,7 +212,6 @@ function Navbar() {
                         onClick={handleCloseNavMenu}
                         component={NavLink}
                         to={page.Link}
-                        primaryText={page.Name}
                       >
                         {page.Name}
                       </MenuItem>
@@ -357,6 +335,9 @@ function Navbar() {
             )}
             {
               (keycloak.onAuthSuccess = () => {
+                console.log("Hejsan!!!!!!!");
+                console.log("Hejsan!!!!!!!");
+                console.log("Hejsan!!!!!!!");
                 checkAuthentication();
               })
             }
@@ -376,4 +357,4 @@ function Navbar() {
     </AppBar>
   );
 }
-export default Navbar;
+export default NavbarNew;

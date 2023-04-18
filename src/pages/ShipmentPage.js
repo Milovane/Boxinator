@@ -5,9 +5,12 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../context";
 
 const ShipmentPage = ({ keycloak }) => {
   const navigate = useNavigate();
+  const { context, updateContext } = useContext(Context);
   const [shipments, setShipments] = useState([]);
   const fontSizeMUIIcons = "10px";
 
