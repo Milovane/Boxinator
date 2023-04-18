@@ -21,6 +21,7 @@ const ShipmentCard = ({ shipment, keycloak }) => {
     COMPLETED: 3,
   };
 
+
   const fetchShipmentDetails = async () => {
     try {
       const response = await axios.get(
@@ -93,18 +94,25 @@ const ShipmentCard = ({ shipment, keycloak }) => {
 
   return (
     <div
-      className="bg-white shadow-md rounded p-6 cursor-pointer"
+      className="bg-white shadow-md rounded p-6 cursor-pointer mx-0.5 my-1"
       onClick={toggleDetails}
     >
       <div className="flex justify-between items-start">
         <div>
           <div className="text-lg font-bold mb-2">{receiverName}</div>
-          <div className="text-sm mb-2">Weight Option: {weightOption}</div>
-          <div className="text-sm mb-2">Box Color: {boxColour}</div>
           <div className="text-sm mb-2">
-            Destination Country: {destinationCountry}
+            <span className="font-bold">Weight Option:</span> {weightOption}
           </div>
-          <div className="text-sm mb-4">Price: ${price}</div>
+          <div className="text-sm mb-2">
+            <span className="font-bold">Box Color:</span> {boxColour}
+          </div>
+          <div className="text-sm mb-2">
+            <span className="font-bold">Destination Country:</span>{" "}
+            {destinationCountry}
+          </div>
+          <div className="text-sm mb-4">
+            <span className="font-bold">Price:</span> ${price}
+          </div>
         </div>
         <div className="flex flex-col items-center">
           <div className="text-base font-semibold mb-2">
