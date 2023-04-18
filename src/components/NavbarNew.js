@@ -11,7 +11,6 @@ import MenuItem from "@mui/material/MenuItem";
 import { Logo } from "./login-components/Logo";
 import Divider from "@mui/material/Divider";
 import { NavLink } from "react-router-dom";
-import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../context";
@@ -19,14 +18,14 @@ import { ROLES } from "../const/roles";
 import SnackBarComponent from "./UserFeedback/SnackBarComponent";
 import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
 import { pagesAndLinks } from "../const/pagesAndLinks";
+import keycloak from "../keycloak";
 
-function Navbar() {
+function NavbarNew() {
   const [state, setState] = React.useState({
     open: false,
     snackbarMessage: "Empty",
     severity: "success",
   });
-  const { keycloak, initialized } = useKeycloak();
   const navigate = useNavigate();
   const { context, updateContext } = useContext(Context);
 
@@ -349,4 +348,4 @@ function Navbar() {
     </AppBar>
   );
 }
-export default Navbar;
+export default NavbarNew;

@@ -1,7 +1,6 @@
 import React from "react";
 import { Logo } from "./login-components/Logo";
 import NavbarLink from "./navbar-components/Link";
-import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../context";
@@ -9,6 +8,7 @@ import Button from "@mui/material/Button";
 import { ROLES } from "../const/roles";
 import SnackBarComponent from "./UserFeedback/SnackBarComponent";
 import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
+import keycloak from "../keycloak";
 
 export const Navbar = () => {
   const [state, setState] = React.useState({
@@ -16,7 +16,6 @@ export const Navbar = () => {
     snackbarMessage: "Empty",
     severity: "success",
   });
-  const { keycloak, initialized } = useKeycloak();
   const navigate = useNavigate();
   const { context, updateContext } = useContext(Context);
   console.log("Context: " + JSON.stringify(context));
