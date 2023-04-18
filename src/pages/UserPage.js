@@ -84,6 +84,7 @@ const UserPage = () => {
       })
       .then((response) => {
         console.log(response.data);
+        updateContext(postUser);
         openSnackBar(
           "Profile information updated",
           SnackbarMessageSeverity.Success
