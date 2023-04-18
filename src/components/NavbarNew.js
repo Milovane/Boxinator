@@ -26,6 +26,15 @@ function NavbarNew() {
     snackbarMessage: "Empty",
     severity: "success",
   });
+
+  React.useEffect(() => {
+    console.log("keycloak uppdaterades?");
+    //navigate to register page if user null
+    if (context.firstName == null) {
+      navigate("/register");
+    }
+  }, [keycloak.token]);
+
   const navigate = useNavigate();
   const { context, updateContext } = useContext(Context);
 
@@ -170,7 +179,6 @@ function NavbarNew() {
                       onClick={handleCloseNavMenu}
                       component={NavLink}
                       to={page.Link}
-                      primaryText={page.Name}
                     >
                       {page.Name}
                     </MenuItem>
@@ -187,7 +195,6 @@ function NavbarNew() {
                         onClick={handleCloseNavMenu}
                         component={NavLink}
                         to={page.Link}
-                        primaryText={page.Name}
                       >
                         {page.Name}
                       </MenuItem>
@@ -205,7 +212,6 @@ function NavbarNew() {
                         onClick={handleCloseNavMenu}
                         component={NavLink}
                         to={page.Link}
-                        primaryText={page.Name}
                       >
                         {page.Name}
                       </MenuItem>
@@ -329,6 +335,9 @@ function NavbarNew() {
             )}
             {
               (keycloak.onAuthSuccess = () => {
+                console.log("Hejsan!!!!!!!");
+                console.log("Hejsan!!!!!!!");
+                console.log("Hejsan!!!!!!!");
                 checkAuthentication();
               })
             }

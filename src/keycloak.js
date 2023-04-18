@@ -18,5 +18,11 @@ export const initialize = () => {
   return keycloak.init(config);
 };
 
+keycloak.onAuthSuccess = () => {
+  console.log("Hallåååååå");
+  console.log("Hallåååååå");
+  console.log("Hallåååååå");
+};
+
 /** @type { Keycloak } keycloak */
 export default keycloak;

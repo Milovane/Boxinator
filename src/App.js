@@ -33,60 +33,57 @@ function App() {
           console.log("onKeycloakEvent", event, error);
         }}
       > */}
-      <BrowserRouter>
-        <Context.Provider value={{ context, updateContext }}>
-          <NavbarNew />
-          {/* <Navbar /> */}
-          <main className="container mx-auto mt-4 mb-24">
-            <Routes>
-              <Route path="/" element={<HomePage />}></Route>
-              {/* <Route path="/login" element={<LoginFormPage />}></Route> */}
-              <Route
-                path="/shipment"
-                element={<ShipmentPage keycloak={keycloak} />}
-              ></Route>
-              <Route path="/register" element={<RegisterForm />}></Route>
-              <Route path="/create-shipment" element={<Shipment />} />
+      <Context.Provider value={{ context, updateContext }}>
+        <NavbarNew />
+        {/* <Navbar /> */}
+        <main className="container mx-auto mt-4 mb-24">
+          <Routes>
+            <Route path="/" element={<HomePage />}></Route>
+            {/* <Route path="/login" element={<LoginFormPage />}></Route> */}
+            <Route
+              path="/shipment"
+              element={<ShipmentPage keycloak={keycloak} />}
+            ></Route>
+            <Route path="/register" element={<RegisterForm />}></Route>
+            <Route path="/create-shipment" element={<Shipment />} />
 
-              <Route
-                path="/admin"
-                element={
-                  <KeycloakRoute role={ROLES.Admin}>
-                    <AdminPage />
-                  </KeycloakRoute>
-                }
-              />
+            <Route
+              path="/admin"
+              element={
+                <KeycloakRoute role={ROLES.Admin}>
+                  <AdminPage />
+                </KeycloakRoute>
+              }
+            />
 
-              <Route
-                path="/country"
-                element={
-                  <KeycloakRoute role={ROLES.Admin}>
-                    <CreateCountryForm />
-                  </KeycloakRoute>
-                }
-              />
+            <Route
+              path="/country"
+              element={
+                <KeycloakRoute role={ROLES.Admin}>
+                  <CreateCountryForm />
+                </KeycloakRoute>
+              }
+            />
 
-              <Route
-                path="/manage-shipments"
-                element={
-                  <KeycloakRoute role={ROLES.Admin}>
-                    <ManageShipmentsPage keycloak={keycloak} />
-                  </KeycloakRoute>
-                }
-              />
+            <Route
+              path="/manage-shipments"
+              element={
+                <KeycloakRoute role={ROLES.Admin}>
+                  <ManageShipmentsPage keycloak={keycloak} />
+                </KeycloakRoute>
+              }
+            />
 
-              <Route path="/history" element={<HistoryPage />}></Route>
-              {keycloak.authenticated && (
-                <Route path="/user" element={<UserPage />} />
-              )}
-              {keycloak.authenticated && (
-                <Route path="/profile" element={<ProfilePage />} />
-              )}
-            </Routes>
-          </main>
-        </Context.Provider>
-      </BrowserRouter>
-      {/* </ReactKeycloakProvider> */}
+            <Route path="/history" element={<HistoryPage />}></Route>
+            {keycloak.authenticated && (
+              <Route path="/user" element={<UserPage />} />
+            )}
+            {keycloak.authenticated && (
+              <Route path="/profile" element={<ProfilePage />} />
+            )}
+          </Routes>
+        </main>
+      </Context.Provider>
     </>
   );
 }

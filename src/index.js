@@ -16,16 +16,16 @@ initialize()
   .then(() => {
     // If No Keycloak Error occurred - Display the App
     root.render(
-      <React.StrictMode>
+      <BrowserRouter>
         <App />
-      </React.StrictMode>
+      </BrowserRouter>
     );
   })
   .catch(() => {
     root.render(
-      <React.StrictMode>
+      <BrowserRouter>
         <p>Could Not Connect To Keycloak.</p>
-      </React.StrictMode>
+      </BrowserRouter>
     );
   });
 
