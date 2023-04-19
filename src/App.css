@@ -42,3 +42,13 @@
   }
 }
 
+
+.gradeTriangle {
+  width: 0px;
+  height: 0px;
+  border-bottom: 50px solid #000;
+  border-left: 50px solid transparent;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}

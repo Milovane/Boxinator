@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "../../styles/ShipmentCard.css"
 
 const ShipmentCard = ({ shipment, keycloak }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -94,9 +95,13 @@ const ShipmentCard = ({ shipment, keycloak }) => {
 
   return (
     <div
-      className="bg-white shadow-md rounded p-6 cursor-pointer mx-0.5 my-1"
+      className="bg-white shadow-md rounded p-6 cursor-pointer mx-0.5 my-1 relative"
       onClick={toggleDetails}
+      style={{ overflow: "hidden" }}
     >
+      <div className="gradeTriangle" style={{ borderColor: `transparent transparent ${boxColour} transparent` }}>
+        <span className="gradeText">${price}</span>
+      </div>
       <div className="flex justify-between items-start">
         <div>
           <div className="text-lg font-bold mb-2">{receiverName}</div>
