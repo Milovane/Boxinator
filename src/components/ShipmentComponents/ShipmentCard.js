@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../../styles/ShipmentCard.css"
+import "../../styles/ShipmentCard.css";
+import "../../styles/3dCard.css";
+import VanillaTilt from "vanilla-tilt";
 
 const ShipmentCard = ({ shipment, keycloak }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -21,7 +23,6 @@ const ShipmentCard = ({ shipment, keycloak }) => {
     INTRANSIT: 2,
     COMPLETED: 3,
   };
-
 
   const fetchShipmentDetails = async () => {
     try {
@@ -91,15 +92,36 @@ const ShipmentCard = ({ shipment, keycloak }) => {
 
   useEffect(() => {
     fetchShipmentDetails();
+
+    // Add the 3D tilt effect to the card
+    const cards = document.querySelectorAll(".threeD-card");
+    cards.forEach((card) => {
+      VanillaTilt.init(card, {
+        max: 25,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.5,
+      });
+    });
+    
+    return () => {
+      cards.forEach((card) => {
+        if (card) {
+          card.vanillaTilt.destroy();
+        }
+      });
+    };
   }, []);
 
   return (
     <div
-      className="bg-white shadow-md rounded p-6 cursor-pointer mx-0.5 my-1 relative"
+      className="threeD-card bg-white shadow-md rounded p-6 cursor-pointer mx-0.5 my-1 relative"
       onClick={toggleDetails}
-      style={{ overflow: "hidden" }}
-    >
-      <div className="gradeTriangle" style={{ borderColor: `transparent transparent ${boxColour} transparent` }}>
+      style={{ overflow: "hidden" }}>
+      <div
+        className="gradeTriangle"
+        style={{ borderColor: `transparent transparent ${boxColour} transparent` }}
+      >
         <span className="gradeText">${price}</span>
       </div>
       <div className="flex justify-between items-start">
@@ -142,7 +164,7 @@ const ShipmentCard = ({ shipment, keycloak }) => {
         </div>
       )}
     </div>
-  );
-};
-
-export default ShipmentCard;
+    );
+  };
+  
+  export default ShipmentCard;
