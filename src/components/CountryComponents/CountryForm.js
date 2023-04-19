@@ -15,14 +15,18 @@ const CountryForm = ({ handleSubmit, buttonName, country, handleChange }) => {
         onSubmit={handleSubmit}
         className="max-w-screen-md mx-auto bg-white rounded-lg shadow dark:border md:mt-0 sm:mx-4 dark:bg-gray-800 dark:border-gray-700 p-6 space-y-4 md:space-y-6 sm:p-8 md:grid md:grid-cols-1"
       >
-        <img src={countriesImage} alt="Country" className="w-80 h-30 mb-4 mx-auto" />
+        <img
+          src={countriesImage}
+          alt="Country"
+          className="w-80 h-30 mb-4 mx-auto"
+        />
         <div className="md:grid md:grid-cols-2 md:gap-x-6">
           <div>
             <label
               htmlFor="name"
               className="font-medium text-gray-700 dark:text-gray-300"
             >
-              Country Name:
+              <span className="font-bold">Country Name:</span>
             </label>
             <Select
               id="name"
@@ -44,7 +48,7 @@ const CountryForm = ({ handleSubmit, buttonName, country, handleChange }) => {
               htmlFor="countryMultiplier"
               className="font-medium text-gray-700 dark:text-gray-300"
             >
-              Country Multiplier:
+              <span className="font-bold">Country Multiplier:</span>
             </label>
             <input
               type="number"
