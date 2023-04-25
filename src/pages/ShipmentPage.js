@@ -7,6 +7,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../context";
+import { user } from "../keycloak";
 
 const ShipmentPage = ({ keycloak }) => {
   const navigate = useNavigate();
@@ -60,6 +61,14 @@ const ShipmentPage = ({ keycloak }) => {
       console.error("Error fetching shipments:", error);
     }
   };
+
+  useEffect(() => {
+    if (user == null) {
+      navigate("/register");
+    } else {
+      updateContext(user);
+    }
+  }, []);
 
   useEffect(() => {
     if (keycloak.authenticated && keycloak.token) {

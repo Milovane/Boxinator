@@ -18,7 +18,7 @@ import { ROLES } from "../const/roles";
 import SnackBarComponent from "./UserFeedback/SnackBarComponent";
 import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
 import { pagesAndLinks } from "../const/pagesAndLinks";
-import keycloak from "../keycloak";
+import keycloak, { user } from "../keycloak";
 
 function NavbarNew() {
   const [state, setState] = React.useState({
@@ -30,7 +30,7 @@ function NavbarNew() {
   React.useEffect(() => {
     console.log("keycloak uppdaterades?");
     //navigate to register page if user null
-    if (context.firstName == null) {
+    if (keycloak.authenticated && user == null) {
       navigate("/register");
     }
   }, [keycloak.token]);
@@ -40,48 +40,6 @@ function NavbarNew() {
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  async function checkAuthentication() {
-    if (keycloak.authenticated) {
-      fetchUserWithId();
-    }
-  }
-
-  async function fetchUserWithId() {
-    const userId = keycloak.subject;
-
-    try {
-      const apiResponse = await fetch(
-        `http://localhost:8080/api/v1/users/${userId}`,
-        {
-          credentials: "include",
-          method: "GET",
-          headers: {
-            "content-type": "application/json",
-            Authorization: "Bearer " + keycloak.token,
-            "User-Agent": "any-name",
-          },
-        }
-      );
-
-      console.log(apiResponse);
-
-      if (apiResponse.ok) {
-        //User exists
-        var user = await apiResponse.json();
-
-        updateContext(user);
-      } else {
-        openSnackBar(
-          "You do not have an account, redirecting to register page",
-          SnackbarMessageSeverity.Error
-        );
-        navigate("/register");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   function logoutFromKeyCloak() {
     handleCloseNavMenu();
@@ -333,20 +291,6 @@ function NavbarNew() {
                 Login
               </Button>
             )}
-            {
-              (keycloak.onAuthSuccess = () => {
-                console.log("Hejsan!!!!!!!");
-                console.log("Hejsan!!!!!!!");
-                console.log("Hejsan!!!!!!!");
-                checkAuthentication();
-              })
-            }
-            {
-              (keycloak.onAuthLogout = () => {
-                console.log("Logout user");
-                navigate("/");
-              })
-            }
           </Box>
         </Toolbar>
       </Container>

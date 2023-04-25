@@ -3,7 +3,8 @@ import axios from "axios";
 import Select from "react-select";
 import countriesList from "../countries.json";
 import UserForm from "../components/UserComponents/UserForm";
-import keycloak from "../keycloak";
+import keycloak, { updateUser } from "../keycloak";
+import { user as keycloakUser } from "../keycloak";
 import { useContext } from "react";
 import { Context } from "../context";
 import SnackBarComponent from "../components/UserFeedback/SnackBarComponent";
@@ -41,18 +42,18 @@ const UserPage = () => {
       contactNumber: "",
     };
 
-    if (context != null) {
-      userFieldsFromContext.firstName = context.firstName;
-      userFieldsFromContext.lastName = context.lastName;
-      userFieldsFromContext.email = context.email;
-      userFieldsFromContext.dateOfBirth = context.dateOfBirth;
-      userFieldsFromContext.country = context.country;
-      userFieldsFromContext.zipCode = context.zipCode;
-      userFieldsFromContext.contactNumber = context.contactNumber;
+    if (keycloakUser != null) {
+      userFieldsFromContext.firstName = keycloakUser.firstName;
+      userFieldsFromContext.lastName = keycloakUser.lastName;
+      userFieldsFromContext.email = keycloakUser.email;
+      userFieldsFromContext.dateOfBirth = keycloakUser.dateOfBirth;
+      userFieldsFromContext.country = keycloakUser.country;
+      userFieldsFromContext.zipCode = keycloakUser.zipCode;
+      userFieldsFromContext.contactNumber = keycloakUser.contactNumber;
     }
 
     setUser(userFieldsFromContext);
-  }, [keycloak.token]);
+  }, [keycloak.token, keycloakUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,6 +64,8 @@ const UserPage = () => {
   };
 
   const handleSubmit = (e) => {
+    console.log(keycloakUser);
+    console.log(keycloak.subject);
     console.log(user);
     console.log(context);
 
@@ -74,17 +77,18 @@ const UserPage = () => {
     };
 
     const postUser = {
-      id: context.id,
+      id: keycloak.subject,
       ...user,
     };
 
     axios
-      .put(`http://localhost:8080/api/v1/users/${context.id}`, postUser, {
+      .put(`http://localhost:8080/api/v1/users/${keycloak.subject}`, postUser, {
         headers: headers,
       })
       .then((response) => {
         console.log(response.data);
         updateContext(postUser);
+        updateUser(postUser);
         openSnackBar(
           "Profile information updated",
           SnackbarMessageSeverity.Success

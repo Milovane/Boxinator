@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import UserForm from "./components/UserComponents/UserForm";
-import keycloak from "./keycloak";
+import keycloak, { user, updateUser } from "./keycloak";
 import { useContext } from "react";
 import { Context } from "./context";
 import { useNavigate } from "react-router-dom";
@@ -56,7 +56,8 @@ const RegisterForm = () => {
       .then((response) => {
         console.log(response.data);
         if (response.request.status === 200) {
-          updateContext(response.data);
+          updateUser(registeredUser);
+          updateContext(registeredUser);
           navigate("/shipment");
         }
       })

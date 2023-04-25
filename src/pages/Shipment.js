@@ -3,7 +3,7 @@ import axios from "axios";
 import "../styles/ShipmentCube.css";
 import { useContext } from "react";
 import { Context } from "../context";
-import keycloak from "../keycloak";
+import keycloak, { user } from "../keycloak";
 import { sendEmailAPI } from "../Email";
 import { SnackbarMessageSeverity } from "../const/SnackbarMessageSeverity";
 import SnackBarComponent from "../components/UserFeedback/SnackBarComponent";
@@ -56,6 +56,12 @@ export default function Shipment() {
   const headers = {
     Authorization: `Bearer ${token}`,
   };
+
+  useEffect(() => {
+    if (user != null) {
+      updateContext(user);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -315,6 +321,16 @@ export default function Shipment() {
               <InfoIcon />
             </span>
             You are not logged in and will add a shipment as a guest user
+          </p>
+        </div>
+      )}
+      {keycloak.authenticated && user == null && (
+        <div className="shipmentContainer container md:mx-auto mt-[10px] mb-24 bg-white p-5 rounded-lg">
+          <p>
+            <span className="text-blue-600">
+              <InfoIcon />
+            </span>
+            You do not have an account at boxinator
           </p>
         </div>
       )}

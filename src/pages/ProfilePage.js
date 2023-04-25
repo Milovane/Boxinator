@@ -1,47 +1,55 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useContext } from "react";
 import { Context } from "../context";
 import PortraitIcon from "@mui/icons-material/Portrait";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import keycloak from "../keycloak";
+import keycloak, { user } from "../keycloak";
 import InfoIcon from "@mui/icons-material/Info";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { context, updateContext } = useContext(Context);
 
+  useEffect(() => {
+    if (user == null) {
+      navigate("/register");
+    } else {
+      updateContext(user);
+    }
+  }, []);
+
   //navigate("/user");
   return (
     <>
       <div className="container md:mx-auto mt-[140px] mb-24 bg-white p-20 rounded-lg">
-        {context.firstName != null && (
+        {user != null && (
           <>
             <h1>
               <PortraitIcon sx={{ fontSize: 60 }} />
             </h1>
 
             <p className="text-[40px] text-transform: capitalize">
-              {context.firstName} {context.lastName}
+              {user.firstName} {user.lastName}
             </p>
             <br />
             <ul>
               <li>
                 <b>Email: </b>
-                {context.email}
+                {user.email}
               </li>
               <li>
                 <b>Date of birth: </b>
-                {context.dateOfBirth}
+                {user.dateOfBirth}
               </li>
               <li>
-                <b>Country: </b> {context.country}
+                <b>Country: </b> {user.country}
               </li>
               <li>
-                <b>Zipcode: </b> {context.zipCode}
+                <b>Zipcode: </b> {user.zipCode}
               </li>
               <li>
-                <b>Contact number: </b> {context.contactNumber}
+                <b>Contact number: </b> {user.contactNumber}
               </li>
             </ul>
             <br />
@@ -51,7 +59,7 @@ const ProfilePage = () => {
           </>
         )}
 
-        {context.firstName == null && (
+        {user == null && (
           <>
             <p>
               <span className="text-blue-600">
